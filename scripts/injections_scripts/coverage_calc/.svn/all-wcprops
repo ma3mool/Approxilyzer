@@ -1,0 +1,29 @@
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/relyzer/!svn/ver/38/scripts/injections_scripts/coverage_calc
+END
+calculate_coverage.sh
+K 25
+svn:wc:ra_dav:version-url
+V 87
+/svn/relyzer/!svn/ver/38/scripts/injections_scripts/coverage_calc/calculate_coverage.sh
+END
+need_cats.txt
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/svn/relyzer/!svn/ver/38/scripts/injections_scripts/coverage_calc/need_cats.txt
+END
+convert_outcome_format.sh
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/relyzer/!svn/ver/38/scripts/injections_scripts/coverage_calc/convert_outcome_format.sh
+END
+parsing_output.pl
+K 25
+svn:wc:ra_dav:version-url
+V 83
+/svn/relyzer/!svn/ver/38/scripts/injections_scripts/coverage_calc/parsing_output.pl
+END

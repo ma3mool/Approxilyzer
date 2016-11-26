@@ -1,0 +1,474 @@
+#!/usr/bin/perl
+
+# This script cleans up the assembly file to contain only the instructions. This will make parsing easy in C/C++.
+#
+# output will contain the following information
+# For instructions
+# 1 c_frequency c_line asm_line pc op op1 op1-stack-heap? op1-address-data? op1-has-offset? op2 (similar options as op1)
+# For labels
+# 0 c_frequency c_line asm_line label 
+
+use Cwd;
+
+my $numArgs = $#ARGV + 1;
+if($numArgs != 8) {
+	print "Usage: perl merge-fault-list.pl <program_name> <static_file_name> <dynamic_heap_file_name> <dynamic_stack_file_name> <output_file_name> <mode_change_log> <live_patterns_log> <control_patterns_log>\n"; 
+	die;
+}
+my $program_name = $ARGV[0];
+my $static_file_name = $ARGV[1];
+my $dynamic_heap_file_name = $ARGV[2];
+my $dynamic_stack_file_name = $ARGV[3];
+my $output_file_name = $ARGV[4];
+my $mode_change_file_name = $ARGV[5];
+my $live_patterns_file_name= $ARGV[6];
+my $control_patterns_file_name= $ARGV[7];
+
+# Formula : (Z^2 * p*(1-p) ) / (E^2)
+# Z :
+#   99% - 2.58
+#   98% - 2.33
+#   95% - 1.96 
+#   90% - 1.645
+
+my $E = 0.05;
+my $Z = 2.58;
+my $p = 0.5;
+
+my $E_2 = $E*$E;
+my $Z_2_p_1_p = $Z*$Z*$p*(1-$p);
+
+#my $sample_size = 16641; # sample size for 99% confidence level for an error of 1%
+#my $sample_size = 666; # sample size for 99% confidence level for an error of 5%
+#my $sample_size = 13573; # sample size for 98% confidence level for an error of 1%
+#my $sample_size = 543; # sample size for 98% confidence level for an error of 5%
+#my $sample_size = 9604; # sample size for 95% confidence level for an error of 1%
+#my $sample_size = 385; # sample size for 95% confidence level for an error of 5%
+
+
+#read top of bb.h
+sub dep_type_string() {
+	my $dep_type = $_;
+	if ($dep_type == 0) { 
+		return "STORE_DEP";
+	} elsif ($dep_type == 1) { 
+		return "COMPARE_DEP";
+	} elsif ($dep_type == 2) { 
+		return "COMPARE_DIR";
+	} elsif ($dep_type == 5) { 
+		return "BRANCH_INST";
+	} elsif ($dep_type == 3) { 
+		return "CALL_SITE_DEP";
+	} elsif ($dep_type == 9) { 
+		return "NON_LIVE";
+	}
+
+	return "";
+}
+
+# Perl trim function to remove whitespace from the start and end of the string
+sub trim($)
+{
+	my $string = shift;
+	$string =~ s/^\s+//;
+	$string =~ s/\s+$//;
+	return $string;
+}
+
+open IN_STATIC, $static_file_name or die "$!: $static_file_name";
+open OUT_FILE, ">$output_file_name" or die "$!: $output_file_name";
+
+open CAT_FILE, ">>cat_file.txt" ;
+my @categories;
+for ($local_i = 0; $local_i < 10; $local_i++) {
+	$categories[$local_i] = 0;
+}
+my $total_merged_count = 0;
+my $total_count = 0;
+my $line = "";
+
+open BRK_FILE, ">>brk_file.txt" ;
+
+$time1=time();
+my %dynamic_heap_map = ();
+open IN_DYNAMIC_HEAP, $dynamic_heap_file_name or die "$!: $dynamic_heap_file_name";
+while (<IN_DYNAMIC_HEAP>) {
+	my $d_line = $_;
+	chomp($d_line);
+	my @d_words = split (/:/, $d_line);
+	$dynamic_heap_map {$d_words[0]} = $d_words[1];
+}
+close IN_DYNAMIC_HEAP;
+$time2 = time();
+$diff = $time2 - $time1;
+print "read dynamic heap: $diff\n";
+
+my %dynamic_stack_map = ();
+open IN_DYNAMIC_STACK, $dynamic_stack_file_name or die "$!: $dynamic_stack_file_name";
+while (<IN_DYNAMIC_STACK>) {
+	my $d_line = $_;
+	chomp($d_line);
+	my @d_words = split (/:/, $d_line);
+	$dynamic_stack_map {$d_words[0]} = $d_words[1];
+}
+close IN_DYNAMIC_STACK;
+$time2 = time();
+$diff = $time2 - $time1;
+print "read dynamic stack: $diff\n";
+
+my %live_map = ();
+open IN_LIVE, $live_patterns_file_name or die "$!: $live_patterns_file_name";
+while (<IN_LIVE>) {
+	my $d_line = $_;
+	chomp($d_line);
+	my @d_words = split (/:/, $d_line);
+	my $priv_cycles = "";
+	if(exists $live_map {$d_words[0]}) {
+		$priv_cycles = $live_map {$d_words[0]};
+	} 
+	$live_map {$d_words[0]} = "$d_words[1] $priv_cycles";
+}
+close IN_LIVE;
+
+my %control_map = ();
+open IN_CONTROL, $control_patterns_file_name or die "$!: $control_patterns_file_name";
+while (<IN_CONTROL>) {
+	my $d_line = $_;
+	chomp($d_line);
+	my @d_words = split (/:/, $d_line);
+	my $priv_cycles = "";
+	if(exists $control_map {$d_words[0]}) {
+		$priv_cycles = $control_map {$d_words[0]};
+	} 
+	$control_map {$d_words[0]} = "$d_words[1] $priv_cycles";
+}
+close IN_CONTROL;
+
+
+#my @mode_file;
+# read the mode info (ranges) in to arrays now and keep it in memory
+# This will help not to open the file every time you want to access the mode info
+my @range;
+my $m_file_index = 0;
+open IN_MODE_FILE, $mode_change_file_name or die "$!: $mode_change_file_name";
+while (<IN_MODE_FILE>) {
+	my $m_line = $_;
+	chomp($m_line);
+	#$mode_file[$m_file_index] = $m_line;
+	chomp($m_line);
+	my @temp_range = split (/-/, $m_line);
+	$range[$m_file_index][0] = $temp_range[0]; 
+	$range[$m_file_index][1] = $temp_range[1]; 
+	$m_file_index++;
+}
+close IN_MODE_FILE;
+$time2 = time();
+$diff = $time2 - $time1;
+print "read mode info: $diff\n";
+
+$static_line_no = 0;
+while (<IN_STATIC>) {
+	$line = $_;
+	# if($static_line_no%100 == 0) {
+	# 	$time2 = time();
+	# 	$diff = $time2 - $time1;
+	#  	print "$static_line_no:$diff \n";
+	# }
+	$static_line_no++;
+
+	my $found = 0;
+	my $cycle_list = "";
+	# frequecy[]:pc:dep_type:{store_pc}:faults
+	# 0- frequency
+	# 1 - pc
+	# 2 - dep_type
+	# 3 - dep_pc
+	# 4 - faults
+	my @words = split (/:/, $line);
+	my $frequency =  $words[0];
+	my $count = 0;
+	if($frequency =~ /(.*)\[\]/) {
+		$count = $1;
+	}
+	my $pc = $words[1];
+	my $dep_type = $words[2];
+	$dep_type = int($dep_type);
+	#print "dep_type = -$dep_type-\n";
+	my $faults = $words [4]; 
+	my $dep_pc = "";
+	my $diff_cycle = "";
+	if($words[3] =~ /\{([0-9a-z]*)\, (-*[0-9]+)\}/) {
+		$dep_pc = $1;
+		$diff_cycle = $2;
+	}
+
+	# get number of bits in the fault
+	my $bits = 0;
+	@fault_list = split(/ \(/, $faults);
+	foreach (@fault_list) {
+		$fault = $_;
+		@elements = split(/\, /, $fault);
+		$bits += $elements[1];
+	}
+
+	$total_count += $count*$bits;
+
+	my $check = 0; # used to make $count to the sample size
+
+	if($dep_type == 0)  { # STORE_DEP
+		$cycle_list = $dynamic_heap_map{$dep_pc} if exists $dynamic_heap_map{$dep_pc};
+		$cycle_list = $dynamic_stack_map{$dep_pc} if exists $dynamic_stack_map{$dep_pc};
+		#print "$dep_pc: $cycle_list\n";
+		@cycles = split(/ /, $cycle_list);
+
+		#print "$count : $#cycles\n";
+		if($#cycles != -1) {
+			$count = $#cycles;
+		} else {
+			$count = 0;
+
+			#$str = &dep_type_string($dep_type);
+			#print "$count:$str:$pc:$faults";
+		}
+	} elsif ($dep_type == 1) { # COMPARE_DEP
+		$check = 1;
+	} elsif ($dep_type == 2) { # COMPARE_DIR
+		if($bits < 1) {
+			$bits = 1;
+		}
+		$bits = 1;
+		$check = 1;
+	} elsif ($dep_type == 3) { # BRANCH_DEP
+		$cycle_list = $control_map{$dep_pc} if exists $control_map{$dep_pc};
+		$cycle_list = $control_map{$dep_pc} if exists $control_map{$dep_pc};
+		@cycles = split(/ /, $cycle_list);
+
+		if($#cycles != -1) {
+			$count = $#cycles;
+		} else {
+			$count = 0;
+		}
+	} elsif ($dep_type == 4) { # BRANCH_INST
+		$cycle_list = $control_map{$dep_pc} if exists $control_map{$dep_pc};
+		$cycle_list = $control_map{$dep_pc} if exists $control_map{$dep_pc};
+		@cycles = split(/ /, $cycle_list);
+
+		if($#cycles != -1) {
+			$count = $#cycles;
+		} else {
+			$count = 0;
+		}
+	} elsif ($dep_type == 5) { # CALL_SITE_DEP - system calls or function calls
+		$check = 1;
+	} elsif ($dep_type == 6) { # CALL_SITE
+		#$count = 0; # stats
+		$check = 1;
+	} elsif ($dep_type == 14) { # ILLTRAP 
+		$count = 0; # ignore faults in illtrap instructions 
+	} elsif ($dep_type == 7) { # RET_SITE
+# What about restore and return both?
+		$bits = 8;
+		#$count = 0; # ignore faults in save instructions for now
+		$check = 1;
+	} elsif ($dep_type == 8) { # RET_DEP
+		$check = 1;
+	} elsif ($dep_type == 9) { # SAVE_SITE
+		$bits = 8;
+		$count = 0; # ignore faults in save instructions for now
+		#$check = 1;
+	} elsif ($dep_type == 10) { # NON_LIVE
+		$check = 1;
+	} elsif ($dep_type == 11) { # STORE_AND_LIVE
+		$check = 1;
+		# keep all the faults in them
+	} elsif ($dep_type == 12) { # LIVE
+		$cycle_list = $live_map{$dep_pc} if exists $live_map{$dep_pc};
+		$cycle_list = $live_map{$dep_pc} if exists $live_map{$dep_pc};
+		@cycles = split(/ /, $cycle_list);
+
+		#print "$count : $#cycles\n";
+		if($#cycles != -1) {
+			#print "$dep_pc: $cycle_list\n";
+			$count = $#cycles;
+		} else {
+			$count = 0;
+		}
+	} elsif ($dep_type == 13) { # DEAD
+		$count = 0; # stats
+	} elsif ($dep_type == 15) { # Read State register 
+		# dont know how to handle this instruction
+		# ignore it for now
+		$count = 0;
+	} else { 
+		# do this for best
+		$check = 1;
+		if($count > 1000000) {
+			#$count = 100;
+			# $str = &dep_type_string($dep_type);
+			# print "$count: ";
+			# print "$str:$cycle_list:$pc:$faults";
+			# open DIS_FILE, "apps/optimized/$program_name/$program_name.dis" or die;
+			# while(<DIS_FILE>) {
+			# 	my $dis_line = $_;
+			# 	if($dis_line =~ /$pc:/) {
+			# 		#$count = 100;
+		      	# 	print $dis_line;
+			# 		last;
+			# 	}
+			# }
+			# close DIS_FILE;
+
+		}
+	}
+
+	my $orig_count = $count;
+	if($check == 1) {
+		if($count > 100) { 
+			my $sample_size = ($count * $Z_2_p_1_p) / (($E_2*($count -1)) + $Z_2_p_1_p);
+			$sample_size = int($sample_size+0.99);
+			$count = $sample_size;
+		}
+		# no faults in instructions marked check
+		if ($dep_type != 10) { # NON_LIVE
+			$count = 0;
+		}
+		$count = 0;
+	}
+
+
+	# branch instructions
+	# my $is_branch = 0;
+	# if($count > 10000 ) {
+	# 	open DIS_FILE, "apps/$program_name/$program_name.dis" or die;
+	# 	while(<DIS_FILE>) {
+	# 		my $dis_line = $_;
+	# 		if($dis_line =~ /$pc/) {
+	# 			if($dis_line =~ /[0-9a-f]\s\sb/) {
+	# 				$is_branch = 1;
+	# 				#$count = 100;
+	# 				last;
+	# 			}
+	# 		}
+	# 	}
+	# 	close DIS_FILE;
+	# }
+
+	if($dep_type != 0) {
+		print BRK_FILE "list_pc_$program_name.append($pc)\n";
+		print BRK_FILE "list_sample_size_$program_name\.append($count)\n";
+		print BRK_FILE "list_population_$program_name.append($orig_count)\n";
+	}
+
+	if($dep_type>=0 && $dep_type <= 8) {
+		$categories[$dep_type] += ($count*$bits);
+	} else {
+		$categories[9] += ($count*$bits);
+	}
+
+	$total_merged_count += $count*$bits;
+
+	$time3 = time();
+	my $new_cycle_list = "";
+	if( $cycle_list ne "") {
+		$cycle_list = trim($cycle_list);
+		@cycles = split(/ /, $cycle_list);
+		foreach $cycle (@cycles) {
+			$cycle = $cycle - $diff_cycle;
+			my $temp_cycle = $cycle;
+			if($diff_cycle != 0) {
+
+				my $num_adjustments = 0;
+				my $need_adjustment = 1; # need to test if the cycle is found in the priv mode again
+				while($need_adjustment == 1) {
+
+					my $start = 0;
+					my $end = $m_file_index;
+					my $adjusted = 0;
+					# first step towards binary search
+					while ($end-$start > 100) { 
+						$middle_point = $start+int(($end-$start)/2);
+						if ($cycle <= $range[$middle_point][1]) {
+							$end = $middle_point;
+						} else {
+							$start = $middle_point+1; 
+						}
+						#print "start=$start, end=$end, middle_point=$middle_point: $cycle:$range[$middle_point][1]\n";
+					}
+					#print "done:start=$start, end=$end\n";
+
+					for ($i=$start; $i<$end; $i++) {
+						if($cycle > $range[$i][0] && $cycle < $range[$i][1])  { # cycle falls in the range of priv mode
+							$cycle = $cycle - ($range[$i][1]-$range[$i][0]) - 1;
+							$adjusted = 1;  # cycle is adusted in this iteration 
+							$num_adjustments++;
+							if($pc eq "0x100002848") {
+								print "$cycle: {$range[$i][0], $range[$i][1]}\n";
+							}
+						} elsif($range[$i][0] > $cycle) {
+							if($pc eq "0x100002848") {
+								print "$cycle: {$range[$i][0]}\n";
+							}
+							last;
+						}
+
+						# my $m_line = $mode_file[$i];
+						# chomp($m_line);
+						# my @range = split (/-/, $m_line);
+						# if($range[0] > $cycle) {
+						# 	if($pc eq "0x100002848") {
+						# 		print "$cycle: {$range[0]}\n";
+						# 	}
+						# 	last;
+						# }
+						# if($cycle > $range[0] && $cycle < $range[1])  { # cycle falls in the range of priv mode
+						# 	$cycle = $cycle - ($range[1]-$range[0]) - 1;
+						# 	$adjusted = 1;  # cycle is adusted in this iteration 
+						# 	$num_adjustments++;
+						# 	if($pc eq "0x100002848") {
+						# 		print "$cycle: {$range[0], $range[1]}\n";
+						# 	}
+						# } 
+					}
+					if($adjusted == 0) { # check if the cycle is adusted in this iteration
+						$need_adjustment = 0; # if not then no need to check again
+					}
+				}
+
+				if($num_adjustments > 0) {
+					#$cycle = $cycle - $num_adjustments;
+					# print "$temp_cycle -> $cycle\n";
+				}
+			}
+	
+			$new_cycle_list = $new_cycle_list . " $cycle";
+		}
+	}
+	if($count*$bits > 1000000) {
+		#print "$dep_type:$count:$pc:$faults";	
+	}
+
+	print OUT_FILE "$dep_type:$count:$new_cycle_list:$pc:$faults";	
+}
+close IN_STATIC;
+close OUT_FILE;
+
+$time2 = time();
+$diff = $time2 - $time1;
+print "Total time: $diff \n";
+
+
+$total_count = $total_count/1000000;
+$total_merged_count = $total_merged_count/1000000;
+
+print "$total_count M -> $total_merged_count M\n";
+open DUMP_FILE, ">>dyn_pruned.txt";
+print  DUMP_FILE "$total_merged_count\n";
+close DUMP_FILE;
+
+print CAT_FILE "$program_name\t";
+for ($local_i = 0; $local_i < 10; $local_i++) {
+	print CAT_FILE "$categories[$local_i]\t";
+}
+print CAT_FILE "\n";
+close CAT_FILE;
+close BRK_FILE;

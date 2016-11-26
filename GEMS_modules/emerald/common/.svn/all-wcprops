@@ -1,0 +1,41 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/relyzer/!svn/ver/2/GEMS_modules/emerald/common
+END
+opal_interface.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/relyzer/!svn/ver/2/GEMS_modules/emerald/common/opal_interface.h
+END
+globals.C
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/relyzer/!svn/ver/2/GEMS_modules/emerald/common/globals.C
+END
+emerald_api.h
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/svn/relyzer/!svn/ver/2/GEMS_modules/emerald/common/emerald_api.h
+END
+globals.h
+K 25
+svn:wc:ra_dav:version-url
+V 61
+/svn/relyzer/!svn/ver/2/GEMS_modules/emerald/common/globals.h
+END
+config.h
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/svn/relyzer/!svn/ver/2/GEMS_modules/emerald/common/config.h
+END
+opal_interface.C
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/relyzer/!svn/ver/2/GEMS_modules/emerald/common/opal_interface.C
+END
