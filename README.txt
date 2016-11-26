@@ -18,7 +18,7 @@ GEMS/SIMICS should be ready.
 
 ********** STEP 2 ********** 
 PREPARING CHECKPOINTS FOR APPLICATION
-
+instructions coming
 
 
 
