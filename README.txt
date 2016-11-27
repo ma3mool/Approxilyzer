@@ -1,31 +1,177 @@
-INSTALLING RELYZER
+APPROXILYZER
+=========================================================
+Approxilyzer is an open-source framework for instruction level approximation
+and resiliency software. Approxilyzer employs Relyzer analysis to discover
+SDC-causing instructions, and qualifies each SDC instruction with a quality.
+The user can use this information to protect vulnerable instructions,
+approximate instructions with low output quality degredation, or use this 
+information for other innovative techniques.
+
+Approxilyzer and Relyzer were developed at the University of Illinois at 
+Urbana-Champaign by the RSIM research group led by Dr. Sarita Adve. The 
+source-software is publicly available under the Illinois License. 
+
+Please cite our papers when you publish results that you have obtained
+using Approxilyzer:
+
+1) Siva Kumar Sastry Hari, Sarita V. Adve, Helia Naeimi, and Pradeep Ramachandran. 
+2012. Relyzer: exploiting application-level fault equivalence to analyze application 
+resiliency to transient faults. In ASPLOS XVII. ACM, New York, NY, USA, 123-134. 
+DOI=http://dx.doi.org/10.1145/2150976.2150990
+
+2) Radha Venkatagiri, Abdulrahman Mahmoud, Siva Kumar Sastry Hari, Sarita V. Adve. 
+2016. Approxilyzer: Towards A Systematic Framework for Instruction-Level Approximate 
+Computing and its Application to Hardware Resiliency. In MICRO 49.
+
+
+
+APPROXILYZER REQUIREMENTS
+=========================================================
+1) WindRiver SIMICS 3.0.31 (requires WindRiver license)
+2) Wisconsin Multifacet GEMS
+3) A SPARC V9 machine, running OpenSolaris (TODO future versions will allow cross-compilation)
+
+
+
+SETTING UP ENVIRONMENT
+==========================================================
+IF YOU ALREADY HAVE GEMS AND SIMICS SET UP, YOU CAN SKIP THIS INSTALLATION STEP.
+
+1) Download and untar GEMS into a local directory
+2) Append the following two lines to your .bashrc:
+    GEMS=/full/path/to/src_GEMS
+    export GEMS
+3) Download SIMICS 3.0.31. Untar locally.
+4) Make a directory for SIMICS installation in GEMS
+    $ cd $GEMS
+    $ mkdir simics
+5) When prompted during the SIMICS installation, provide the absolute path
+to the directory just created in Step 4
+6) Edit your .bashrc with the following lines:
+    SIMICS_INSTALL=/full/path/to/simics/simics-3.0.31
+    export SIMICS_INSTALL
+7) Follow the instructions from GEMS site for setting up SIMICS.
+Screenshots are available here TODO.
+8) In common/Makefile.common, under the amd64-linux, use the following settings 
+for various flags:
+    CC = /usr/bin/g++34
+    OPT_FLAGS=-m64 -march-opetron -fPIC
+    LDFLAGS += -WI, -R/usr/lib64
+    MODULE_LDFLAGS += -WI, -R/usr/lib64
+9) Also update the variable SIMICS_INCLUDE_ROOT in Makefile.common to point to the 
+/src/include directory. Change the $(GEMS_ROOT) and fully elaborate the path name.
+10) In $GEMS/scripts/prepare_simics_home.sh, change
+    x86-linux -> amd64-linux
+    ../sarek/simics -> ../../simics
+11) Copy our provided Opal version, and then install Opal using:
+    $ cd $GEMS/opal
+    $ make clean
+    $ make module DESTINATION=dynamic_relyzer
+    (might have to manually make the directory "dynamic_relyzer" in $GEMS/simics/home/)
+12) Install Ruby
+    $ cd $GEMS/ruby
+    $ make clean
+    $ make module DESTINATION=dynamic_relyzer PROTOCOL=MOSI_SMP_bcast
+    
+
+
+APPROXILYZER SETUP 
 ==========================================================
 
-********** STEP 1 ********** 
-INSTALL GEMS/SIMICS WITH CORRECT MODULES
+Everything you need to run Approxilyzer is provied in the approxilyzer.sh script.
 
-1) Install GEMS locally
-2) Edit bashrc file
-3) download/install simics, version 3.0.X
-4) Edit bashrc file
-5) fix flags for simics makefile
-6) install ruby
-7) install emerald 
-    - copy from package dir
-    - run script to populate /$GEMS/simics/modules/emerald
+git clone this repo locally:
+    $git clone git@github.com:ma3mool/Approxilyzer.git
 
-GEMS/SIMICS should be ready.
+To setup Approxilyzer:
+    $./approxilyzer.sh -s prep
 
-********** STEP 2 ********** 
-PREPARING CHECKPOINTS FOR APPLICATION
-instructions coming
+This will prepare your Approxilyzer directory structure, copy and install Emerald 
+(a GEMS module), and allow you to use the rest of Approxilyzer. This only has to
+be done once. If you run into issues, check that environmental issues are set up
+properly.
+
+Finally, add an additional environment path variable to your .bashrc
+    RELYZER_SHARED = /absolute/path/to/cloned/environment
 
 
+APPROXILYZER USE 
+==========================================================
 
-********** STEP 3 ********** 
-STATIC ANALYSIS
+PREPARING ISO:
+Approxilyzer requires application binaries to be mounted on an ISO for analysis.
+The technique is streamlined once you have your application(s) on an ISO.
+
+The required files in the ISO are:
+    For each application:
+        - a binary (app_name)
+        - a disassembly file (app_name.dis)
+        - a run script (run_script.sh)
+Each application must be in its own seperate directory.
+
+Each applications ISO also requires a corresponding ISO with the "golden output" of
+an application's fault-free run. This ISO should have all outputs together at the 
+top level, without subdirectories:
+    For each application run script:
+        - Golden output. (app_name.output)
+
+When generating the ISO, you can use the following command in a terminal:
+    $ mkisofs -RJ -o <filename>.iso <directory/with/required/files>
+
+You can test the mount locally with:
+    $ mount - loop <filename>.iso /mnt/point/here
 
 
-********** STEP 4 ********** 
-DYNAMIC ANALYSIS
+We provide a template application ISO and golden ISO with the distribution loading 
+some PARSEC and SPLASH-2 benchmarks. 
+
+
+
+PREPARING SIMICS CHECKPOINTS:
+1) Place both ISOs in the $RELYZER_SHARED/workloads/iso/ directory.
+2) Copy the content of the golden ISO and place it in $RELYZER/workloads/golden_output/ 
+directory.
+3) Make a checkpoint for the whole iso:
+    $ ./approxilyzer -I [iso_name]
+4) Make a checkpoint for each application you want to run Approxilyzer on:
+    $ ./approxilyzer -a [app_name] -c [associated run_script_name]
+
+
+
+GENERATING A FAULT LIST:
+1) Make a new directory for the application inside $RELYZER_SHARED/workloads/apps/
+The naming convention should be [app_name]_[run_script_name]
+2) Inside this new directory, place the binary and disassembly file.
+3) Run Approxilyzer static analysis phase 1:
+    $ ./approxilyzer -r prof -a [app_name]
+4) You should be prompted to edit a newly generated file inside the apps directory.
+Follow the instructions in the prompt. 
+5) Rerun the application profiler:
+    $ ./approxilyzer -r prof -a [app_name]
+6) Once done, run the dynamic analysis phase:
+    $ ./approxilyzer -r anlys -a [app_name]
+7) In the config file, you can now make some optimizations that are highly recommended
+8) Run error site generation:
+    $ ./approxilyzer -r fault_gen -a [app_name]
+9) Generate intermediate SIMICS checkpoints for improved performance during injection:
+    $ ./approxilyzer -r int_ckpt -a [app_name]
+10) You are now done! The fault list should be located inside $RELYZER_SHARED/results/
+
+
+RUNNING RELYZER FAULT INJECTIONS:
+1) Prepare fault injection directories:
+    $ ./approxilyzer -i prep -a [app_name]
+2) A list of fault injections will be available in $RELYZER_SHARED/results/simics_file_list. Run one injection experiment per line. These can be done in 
+parallel.
+    $ cd scripts/injections_scripts/
+    $ ./run_injection_jobs.pl [injection]
+Alternatively, you can use a parallel script which calls run_injection_jobs using condor
+    $ ./submit_full_injection_jobs.pl
+3) Once injections are done (this may take some time), collect the results and analyze:
+    $ ./approxilyzer -i results -a [app_name]
+4) Results should now be at $RELYZER_SHARED/results/injection_results/parsed_results/
+
+
+RUNNING APPROXILYZER ANALYSIS:
+
 
