@@ -9,6 +9,7 @@ Approxilyzer employs static and dynamic analysis, in addition to heuristics, to 
 the run-time of finding Approximate instructions and SDC-causing instructions by 3-6x 
 orders of magnitude.
 
+Project overview can be viewed at: https://rsim.cs.illinois.edu/approxilyzer
 
 
 
@@ -16,14 +17,14 @@ APPROXILYZER REQUIREMENTS
 =========================================================
 1) WindRiver SIMICS 3.0.31 (requires WindRiver license)
 2) Wisconsin Multifacet GEMS
-3) A SPARC V9 machine, running OpenSolaris (TODO future versions will allow cross-compilation)
+3) A SPARC V9 machine, running OpenSolaris 
 
 
 
 SETTING UP ENVIRONMENT
 ==========================================================
 1) Download and untar GEMS into a local directory.  
-    You can find this at http://research.cs.wisc.edu/gems/, or use our tarball at https://rsim.cs.illinois.edu/approxilyzer/GEMS_Approxilyzer.tar
+    You can find this at http://research.cs.wisc.edu/gems/, or use our tarball at rsim.cs.illinois.edu/approxilyzer/GEMS_Approxilyzer.tar
 2) Append the following two lines to your .bashrc:
     GEMS_PATH=/full/path/to/src_GEMS
     export GEMS_PATH
@@ -132,10 +133,19 @@ You can test the mount locally with:
 
 We provide a template application ISO and golden ISO with the distribution loading 
 some PARSEC and SPLASH-2 benchmarks. 
-Download here: https://rsim.cs.illinois.edu/approxilyzer/fully_optimized.iso
+Fully Opimized ISO: rsim.cs.illinois.edu/approxilyzer/fully_optimized.iso
+Fully Opimized Output ISO: rsim.cs.illinois.edu/approxilyzer/fully_optimized_output.iso
+ 
 
 
 PREPARING SIMICS CHECKPOINTS:
+
+Before running the following steps, you should have a base Simics checkpoint
+running the OpenSolaris operating system, and compiled to the SPARC V9 ISA.
+Relevant instructions can be found at http://research.cs.wisc.edu/gems/GEMS-Ubuntu.pdf.
+
+Once you have a base checkpoint, edit the top of $APPROXILYZER/scripts/dynamic_relyzer/simpoint.py with the base checkpoint path. Then follow the steps below:
+
 1) Place both ISOs in the $RELYZER_SHARED/workloads/iso/ directory.
 2) Copy the content of the golden ISO and place it in $RELYZER/workloads/golden_output/ 
 directory.
