@@ -2,7 +2,7 @@
 
 # reformats output, creates *_all_sdcs.txt by invoking parsing_output.pl
 
-DIR=$RELYZER_SHARED/scripts/injections_scripts
+DIR=$APPROXILYZER/scripts/injections_scripts
 
 if [ -d $DIR ]; then
     echo "Directory found"

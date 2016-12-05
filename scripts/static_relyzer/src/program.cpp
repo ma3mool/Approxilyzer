@@ -356,7 +356,7 @@ void program_t::print_fault_set(bool original, int fm) {
 #if(UNOPT_APPS) // DEFUNCT
 	string fault_list_file_name = "output/unopt/" + program_name + "_" + app_name + "_fault_list.txt";
 #else
-	string fault_list_file_name =  string(std::getenv("RELYZER_SHARED"))  + "/" + FAULT_LIST_DIR + program_name +/* TODO "_" + app_name +*/ "_fault_list.txt";
+	string fault_list_file_name =  string(std::getenv("APPROXILYZER"))  + "/" + FAULT_LIST_DIR + program_name +/* TODO "_" + app_name +*/ "_fault_list.txt";
 #endif
 	output_file.open(fault_list_file_name.c_str(), ios::out);
 	

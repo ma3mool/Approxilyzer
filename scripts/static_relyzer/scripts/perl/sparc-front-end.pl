@@ -18,7 +18,7 @@ my $file_name = $ARGV[0];
 my $program_name = $ARGV[1];
 #my $file_type = $ARGV[2];
 
-my $APPS_PATH = "$ENV{RELYZER_SHARED}/workloads/apps/$program_name";
+my $APPS_PATH = "$ENV{APPROXILYZER}/workloads/apps/$program_name";
 #$APPS_PATH .= "/$program_name";
 print "APP PATH IS $APPS_PATH\n";
 

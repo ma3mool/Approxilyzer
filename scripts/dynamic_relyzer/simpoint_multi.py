@@ -17,8 +17,8 @@ if OPT_LEVEL == "fully_optimized" :
   BASE_CHECKPOINT = "/home/venktgr2/checkpts/opensolaris_intel_chkpt/optimized_apps/fully_optimized/apps_copied"
   #BASE_CHECKPOINT = "/shared/workspace/kahmed10/src_GEMS/simics_3_workspace/sol10-clean"
   #BASE_CHECKPOINT = "/shared/workspace/approx_comp/workloads/checkpoints/sol10-clean" #khalique checkpoint
-  WORKLOADS_PATH = os.environ.get('RELYZER_SHARED') + "/workloads/"
-  CHECKPOINT_DIR = os.environ.get('RELYZER_SHARED') + "/workloads/checkpoints/"
+  WORKLOADS_PATH = os.environ.get('APPROXILYZER') + "/workloads/"
+  CHECKPOINT_DIR = os.environ.get('APPROXILYZER') + "/workloads/checkpoints/"
 #  MAIN_LOG_DIR = "./fully_optimized_main_logs_new/"
   #MAIN_LOG_DIR = "./abdul_fully_optimized_main_logs_new/"
 #  MAIN_LOG_DIR = "./fully_optimized_main_logs_isca_2016/"
@@ -3278,7 +3278,7 @@ def add_detector_locations(app):
 
 
 def get_injected_val(golden_val, bits):
-  
+
   faulty_val = golden_val
   print "golden reg val=%d (%x)" %(golden_val, golden_val)
   faulty_val = faulty_val ^ bits

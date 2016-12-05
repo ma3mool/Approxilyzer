@@ -4,7 +4,7 @@ use Cwd;
 use FileHandle;
 #use lib '/home/sadve/shari2/research/relyzer/perl';
 #use lib '/shared/workspace/amahmou2/relyzer/perl';
-use lib "$ENV{RELYZER_SHARED}/scripts/static_relyzer/scripts/perl"; #TODO MAKE SCALABLE
+use lib "$ENV{APPROXILYZER}/scripts/static_relyzer/scripts/perl"; #TODO MAKE SCALABLE
 use common_subs;
 
 my $BIT_GAP = 1;
@@ -614,7 +614,7 @@ foreach $cov (@metric_coverage) {
 		my $stop = 0;
 	
 		if($write_files == 1) {
-			my $simics_filename = "$ENV{RELYZER_SHARED}";
+			my $simics_filename = "$ENV{APPROXILYZER}";
             $simics_filename .= "/fault_list_output/simics_file_list/simics_file_list_$app_name\_$prune_type\_50_$x\_$BIT_GAP.txt";
 
             # removes file if it already exists, because concatenation will append to old file

@@ -3,8 +3,8 @@
 # this is for running the various analysis for Relyzer
 # Makes a condor script which can be called on veena-server by "condor_submit [condorFileName]"
 
-SIMICS_DIR=$GEMS_PATH_SHARED/simics/home/dynamic_relyzer/   # Simics directory to run experiments from 
-CONDOR_SCRIPTS_PATH=$RELYZER_SHARED/fault_list_output/condor_scripts
+SIMICS_DIR=$GEMS_PATH/simics/home/dynamic_relyzer/   # Simics directory to run experiments from 
+CONDOR_SCRIPTS_PATH=$APPROXILYZER/fault_list_output/condor_scripts
 
 TIMEOFDAY=$(date +"%m_%d_%Y_%H_%M_%S")
 

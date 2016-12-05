@@ -23,15 +23,15 @@ APPROXILYZER REQUIREMENTS
 SETTING UP ENVIRONMENT
 ==========================================================
 1) Download and untar GEMS into a local directory.  
-    You can find this at http://research.cs.wisc.edu/gems/, or use our tarball at:
-    https://rsim.cs.illinois.edu/approxilyzer/GEM_Approxilyzer.tar 
+    You can find this at [Wisconsin MultiFacet GEMS](http://research.cs.wisc.edu/gems/), or use our [tarball](https://rsim.cs.illinois.edu/approxilyzer/GEMS_Approxilyzer.tar) 
 2) Append the following two lines to your .bashrc:
-    GEMS=/full/path/to/src_GEMS
-    export GEMS
+    GEMS_PATH=/full/path/to/src_GEMS
+    export GEMS_PATH
 3) Download SIMICS 3.0.31. Untar locally. 
-    Instructions on how to obtain SIMICS can be found here: http://research.cs.wisc.edu/gems/GEMS-Ubuntu.pdf
-4) Make a directory for SIMICS installation alongside $GEMS
-    $ cd $GEMS
+    Instructions on how to obtain a SIMICS academic license can be 
+    found [here](http://research.cs.wisc.edu/gems/GEMS-Ubuntu.pdf).
+4) Make a directory for SIMICS installation alongside $GEMS_PATH
+    $ cd $GEMS_PATH
     $ cd ../
     $ mkdir simics
 5) When prompted during the SIMICS installation, provide the absolute path
@@ -39,56 +39,71 @@ to the directory just created in Step 4
 6) Edit your .bashrc with the following lines:
     SIMICS_INSTALL=/full/path/to/simics/simics-3.0.31
     export SIMICS_INSTALL
-7) Follow the instructions from GEMS site for setting up SIMICS.
+7) Follow the instructions from the GEMS site for setting up SIMICS.
     http://research.cs.wisc.edu/gems/doc/gems-wiki/moin.cgi/Setup_for_Simics_3.0.X 
 8) In common/Makefile.common, under the amd64-linux, use the following settings 
-for various flags:
+for various flags, or set them accordingly:
     CC = /usr/bin/g++34
     OPT_FLAGS=-m64 -march-opetron -fPIC
     LDFLAGS += -WI, -R/usr/lib64
     MODULE_LDFLAGS += -WI, -R/usr/lib64
 9) Update the variable SIMICS_INCLUDE_ROOT in Makefile.common to point to the 
 /src/include directory. Change the $(GEMS_ROOT) and fully elaborate the path name.
-10) In $GEMS/scripts/prepare_simics_home.sh, change
+10) In $GEMS_PATH/scripts/prepare_simics_home.sh, change
     x86-linux -> amd64-linux
     ../sarek/simics -> ../../simics
+11) git clone the Approxilyzer repo locally. You can also put this alongside GEMS:
+    $ cd $GEMS_PATH
+    $ cd ../
+    $ git clone git@github.com:ma3mool/Approxilyzer.git
+12) Add the following environment path variable to your .bashrc
+    APPROXILYZER = /absolute/path/to/cloned/environment
+    export APPROXILYZER
 
 
+GEMS MODULES INSTALLATION
+==========================================================
+1) Copy our provided Opal version, and then install Opal using:
+    WARNING!! IF YOU PREVIOUSLY HAD GEMS INSTALLED, YOU MAY WANT TO SAVE YOUR OPAL
+    $ mv $GEMS_PATH/opal $GEMS_PATH/old_opal
 
-
-11) Copy our provided Opal version, and then install Opal using:
-    $ cd $GEMS/opal
+    $ cp -R $APPROXILYZER/GEMS_modules/opal $GEMS_PATH/
+    $ cd $GEMS_PATH/opal
     $ make clean
     $ make module DESTINATION=dynamic_relyzer
-    (might have to manually make the directory "dynamic_relyzer" in $GEMS/simics/home/)
-12) Install Ruby
-    $ cd $GEMS/ruby
+    (might have to manually make the directory "dynamic_relyzer" in $GEMS_PATH/simics/home/)
+
+2) Install Ruby
+    $ cd $GEMS_PATH/ruby
     $ make clean
     $ make module DESTINATION=dynamic_relyzer PROTOCOL=MOSI_SMP_bcast
-    
+  
 
 
 APPROXILYZER SETUP 
 ==========================================================
 
-Everything you need to run Approxilyzer is provied in the approxilyzer.sh script.
-
-git clone this repo locally:
-    $git clone git@github.com:ma3mool/Approxilyzer.git
+Everything you need to run Approxilyzer is provided in the approxilyzer.sh script.
 
 To setup Approxilyzer:
     $./approxilyzer.sh -s prep
 
-This will prepare your Approxilyzer directory structure, copy and install Emerald 
-(a GEMS module), and allow you to use the rest of Approxilyzer. This only has to
-be done once. If you run into issues, check that environmental issues are set up
+This start script will:
+    1) prepare your Approxilyzer directory structure
+    2) copy and install Emerald (a GEMS module)
+    3) create a symlink to simpoint.py from your simics_3_workspace
+
+which will allow you to use the rest of Approxilyzer. This only has to
+be done once. If you run into issues, check that environmental paths are set up
 properly.
 
-Finally, add an additional environment path variable to your .bashrc
-    RELYZER_SHARED = /absolute/path/to/cloned/environment
+For help on how to use this script, just run:
+    $./approxilyzer.sh
+OR
+    $./approxilyzer.sh -help
 
 
-APPROXILYZER USE 
+HOW TO USE APPROXILYZER
 ==========================================================
 
 PREPARING ISO:

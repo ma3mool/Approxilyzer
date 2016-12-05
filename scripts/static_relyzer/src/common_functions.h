@@ -56,6 +56,8 @@ int get_stack_limit(std::string program_name) {
 		return STACK_BLACKSCHOLES_RUN_FULL;
 	else if(program_name.compare("blackscholes_run_21_a") == 0) 
 		return STACK_BLACKSCHOLES_RUN_FULL;
+	else if(program_name.compare("blackscholes_run_21_c") == 0) 
+		return STACK_BLACKSCHOLES_RUN_FULL;
 	else if(program_name.compare("blackscholes_run_5") == 0) 
 		return STACK_BLACKSCHOLES_RUN_FULL;
 	else if(program_name.compare("blackscholes_run_5_rand") == 0) 
@@ -150,6 +152,8 @@ int get_heap_limit(std::string program_name) {
 	else if(program_name.compare("blackscholes_run_full") == 0) 
         return HEAP_BLACKSCHOLES_RUN_FULL;
 	else if(program_name.compare("blackscholes_run_21_a") == 0) 
+        return HEAP_BLACKSCHOLES_RUN_FULL;
+	else if(program_name.compare("blackscholes_run_21_c") == 0) 
         return HEAP_BLACKSCHOLES_RUN_FULL;
 	else if(program_name.compare("blackscholes_run_5") == 0) 
         return HEAP_BLACKSCHOLES_RUN_FULL;
@@ -255,6 +259,8 @@ int get_text_size(std::string program_name) {
 	else if(program_name.compare("blackscholes") == 0) 
 		return 15;
 	else if(program_name.compare("blackscholes_run_21_a") == 0) 
+		return 15;
+	else if(program_name.compare("blackscholes_run_21_c") == 0) 
 		return 15;
 	else if(program_name.compare("blackscholes_run_5") == 0) 
 		return 15;

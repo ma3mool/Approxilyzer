@@ -4,8 +4,8 @@
 # to this format:           $app_name.pc$pc.p$adjusted_pilot.c$c.t$fault_type.b$i.s     .r$arch_reg.
 
 
-INPUT_DIR=$RELYZER_SHARED/fault_list_output/coverage_calculation/raw_outcomes_feigned
-OUTPUT_DIR=$RELYZER_SHARED/fault_list_output/coverage_calculation/reformatted_outcomes
+INPUT_DIR=$APPROXILYZER/fault_list_output/coverage_calculation/raw_outcomes_feigned
+OUTPUT_DIR=$APPROXILYZER/fault_list_output/coverage_calculation/reformatted_outcomes
 
 
 if [ $# -ne 2 ]; then

@@ -24,9 +24,9 @@ $COMPARE_CHKPT_DIR = "/mounts/sadve/tmp";
 $COMPARE_GOLDEN_CHKPT_DIR = "/scratch/amahmou2/compare_golden_checkpoints";
 $OUTPUT_DIR= "/scratch/amahmou2/outputs";
 $GENERATED_SIMICS_FILE_DIR= "/scratch/amahmou2/generated_simics_files";
-$LOG_DIR = $ENV{'RELYZER_SHARED'} .+ "/fault_list_output/injection_results/parallel_outcomes";
+$LOG_DIR = $ENV{'APPROXILYZER'} .+ "/fault_list_output/injection_results/parallel_outcomes";
 print "$LOG_DIR \n";
-$SIMICS_PATH = $ENV{'GEMS_PATH_SHARED'} .+ "/simics/home/dynamic_relyzer";
+$SIMICS_PATH = $ENV{'GEMS_PATH'} .+ "/simics/home/dynamic_relyzer";
 $OUTPUT_MAX_ATTEMPTS = 2;
 $MAX_PROCEEDS = 2;
 $MAX_USED_SPACE = 90;
@@ -384,9 +384,9 @@ while ($num_proceeded >= 1) {
 		open( IN_CONFIG, "<$checkpoint_filename" );
 		open( OUT_CONFIG, ">$checkpoint_filename.out");
 		$no_print = 0;
+        
         # MAKE SCALABLE
-        #my $sd1_config = "/home/pramach2/research/GEMS/simics/home/spec_opensolaris/sd1_config" ;
-        my $sd1_config = "/home/venktgr2/checkpts/spec_opensolaris/sd1_config" ;
+        my $sd1_config = "/home/venktgr2/checkpts/spec_opensolaris/sd1_config" ; # EDIT HERE
 		my $add_sd1 = 1 ;
 		my $has_sd1 = 1 ;
 		while (<IN_CONFIG>) {
@@ -450,7 +450,9 @@ while ($num_proceeded >= 1) {
 		my $masked = 0 ;
 		while(<OUTPUT>) {
 			$line = $_;
+            print "OUTPUT IS $line\n";
 	        if($line =~ /Detected (.*)/) {
+                print "GOT INSIDE THE IF\n";
 				$why = $1;
                 $symp = 1 ;
 				$final_result = "Detected:$why";
@@ -485,7 +487,7 @@ while ($num_proceeded >= 1) {
                     #MAKE THIS SCALABLE
                     #$golden_file = "/home/shari2/outputs/fully_optimized/$app_name.output";
                     #$golden_file = "/shared/workspace/amahmou2/iso/fully_optimized_output/$app_name.output";
-                    $golden_file = $ENV{RELYZER_SHARED} .+ "/workloads/golden_output/$app_name.output";
+                    $golden_file = $ENV{APPROXILYZER} .+ "/workloads/golden_output/$app_name.output";
                     print "golden file is: $golden_file\n";
 					
 					if(-e "$output_file") {
@@ -542,7 +544,7 @@ while ($num_proceeded >= 1) {
 								# system("echo \"SDC\" >> $completion_output_filename");
 								$final_result = "SDC";
 								my $curr_l = -1;
-                                $temp_result = `perl $ENV{RELYZER_SHARED}/scripts/injections_scripts/detailed_app_level_analysis.pl $app_name $output_file`;
+                                $temp_result = `perl $ENV{APPROXILYZER}/scripts/injections_scripts/detailed_app_level_analysis.pl $app_name $output_file`;
                                 #$temp_result = `perl $SIMICS_PATH/scripts/app_level_analysis.pl $app_name $output_file`;
 								print $temp_result;
 								print "SDC acceptability = $temp_result\n";

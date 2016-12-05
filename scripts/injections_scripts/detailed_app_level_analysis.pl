@@ -2,7 +2,7 @@
 use Scalar::Util 'looks_like_number';
 
 #my $GOLDEN_DIR = "/home/venktgr2/outputs/fully_optimized";
-my $GOLDEN_DIR = "$ENV{RELYZER_SHARED}/workloads/golden_output";
+my $GOLDEN_DIR = "$ENV{APPROXILYZER}/workloads/golden_output";
 my $numArgs = $#ARGV + 1;
 if($numArgs != 2) {
         print "Usage: perl detailed_app_level_analysis.pl <app_name> <output_file>\n";

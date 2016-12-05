@@ -11,17 +11,17 @@ if [ $# -ne 2 ]; then
 fi
 
 # checks to make sure file certain paths exist. Relyzer, GEMS, and SIMICS, Relyzer apps
-if [ -d $RELYZER_SHARED ]; then
-    echo "Relyzer directory exists"
+if [ -d $APPROXILYZER ]; then
+    echo "APPROXILYZER directory exists"
 else
-    echo "No Relyzer directory. Add it to your .bashrc"
+    echo "No Approxilyzer directory. Add it to your .bashrc"
     exit 1
 fi
 
 
-INJECTION_SCRIPTS=$RELYZER_SHARED/scripts/injections_scripts
-INJECTION_RESULTS=$RELYZER_SHARED/fault_list_output/injection_results
-VALIDATION_RESULTS=$RELYZER_SHARED/fault_list_output/validation_results
+INJECTION_SCRIPTS=$APPROXILYZER/scripts/injections_scripts
+INJECTION_RESULTS=$APPROXILYZER/fault_list_output/injection_results
+VALIDATION_RESULTS=$APPROXILYZER/fault_list_output/validation_results
 
 
 # Phase 1: parallel write optimization
@@ -32,7 +32,7 @@ if [ $2 -eq "1" ]; then
 
     # create condor injection script. Run offline inside screen
     echo "READY FOR INJECTIONS:"
-    echo "Run $RELYZER_SHARED/scripts/injections_scripts/submit_full_injection_jobs <validation_file_list> on Veena-Server"
+    echo "Run $APPROXILYZER/scripts/injections_scripts/submit_full_injection_jobs <validation_file_list> on Veena-Server"
 
 fi  
 

@@ -31,14 +31,14 @@ if [ $# -ne 3 ]; then
 fi
 
 # make sure checkpoint exists
-if [[ ! -e $RELYZER_SHARED/workloads/checkpoints/${1} ]]; then
+if [[ ! -e $APPROXILYZER/workloads/checkpoints/${1} ]]; then
     echo "Checkpoint does not exist. Please make a checkpoint of your ISO"
     exit 1
 fi
 
 
 ### DIR STRUCTURE ###
-DIR_0=$RELYZER_SHARED/workloads/checkpoints/
+DIR_0=$APPROXILYZER/workloads/checkpoints/
 
 if [[ ! -d $DIR_0 ]]; then
     echo "Fix directory structure"

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DIR=$RELYZER_SHARED/fault_list_output/injection_results/parallel_outcomes
+DIR=$APPROXILYZER/fault_list_output/injection_results/parallel_outcomes
 
 if [ $# -ne 1 ]; then
     echo "Usage: ./reset_outcomes.sh [app_name]"

@@ -6,6 +6,7 @@
 # NOTE: THIS SCRIPT DOES NOT RUN THE SIMICS SCRIPTS, IT JUST GENERATES THEM
 
 
+
 script_content()
 {
     if [ -z "$1" ]
@@ -31,14 +32,14 @@ if [ $# -ne 1 ]; then
 fi
 
 # make sure ISO exists
-if [[ ! -e $RELYZER_SHARED/workloads/iso/${1}.iso ]]; then
+if [[ ! -e $APPROXILYZER/workloads/iso/${1}.iso ]]; then
     echo "ISO is not in correct location. Please put in workloads/iso"
     exit 1
 fi
 
 
 ### DIR STRUCTURE ###
-DIR_0=$RELYZER_SHARED/workloads/checkpoints/
+DIR_0=$APPROXILYZER/workloads/checkpoints/
 
 if [[ ! -d $DIR_0 ]]; then
     echo "Fix directory structure"

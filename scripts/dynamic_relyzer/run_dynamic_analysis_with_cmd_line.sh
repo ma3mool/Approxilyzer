@@ -15,7 +15,7 @@ if [ $# -ne 4 ]; then
 fi
 
 ### DIR STRUCTURE ###
-DIR_0=$RELYZER_SHARED/workloads/apps/
+DIR_0=$APPROXILYZER/workloads/apps/
 
 if [[ ! -d $DIR_0/${4} ]]; then
     echo "No directory created for ${4} in workspace/app"
@@ -32,7 +32,7 @@ fi
 
 
 DIR=${DIR_0}/${4}/simics_files/                             # directory where all scripts reside 
-SIMICS_DIR=$GEMS_PATH_SHARED/simics/home/dynamic_relyzer/   # Simics directory to run experiments from 
+SIMICS_DIR=$GEMS_PATH/simics/home/dynamic_relyzer/   # Simics directory to run experiments from 
 
 LOG=${DIR_0}/${4}/analysis_output/                          # output directory
 ERROR_LOG=$LOG/error/                                       # stdout and stderr output directory 

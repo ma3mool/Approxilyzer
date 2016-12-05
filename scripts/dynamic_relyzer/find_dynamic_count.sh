@@ -2,7 +2,7 @@
 
 APP=$1
 
-DIR=$RELYZER_SHARED/workloads/apps/
+DIR=$APPROXILYZER/workloads/apps/
 OUTPUT=$DIR/$APP/$APP.dynamic
 
 file1=$DIR/$APP/static_inst  # original job injection file list

@@ -8,8 +8,8 @@
 #   4. runs use_def_prune.pl
 #   5. replaces the masked with the output of use_def_prune.pl
 
-INJECTION_RESULTS_DIR=$RELYZER_SHARED/fault_list_output/injection_results
-INJECTION_SCRIPTS=$RELYZER_SHARED/scripts/injections_scripts
+INJECTION_RESULTS_DIR=$APPROXILYZER/fault_list_output/injection_results
+INJECTION_SCRIPTS=$APPROXILYZER/scripts/injections_scripts
 OUTCOMES_PATH=$INJECTION_RESULTS_DIR/raw_outcomes # directory with input files
 
 PARSED_RESULTS=$INJECTION_RESULTS_DIR/parsed_results

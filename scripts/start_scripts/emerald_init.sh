@@ -3,14 +3,14 @@
 echo "Making symlink for Emerald module in GEMS directory"
 
 # checks to make sure file certain paths exist. Relyzer, GEMS, and SIMICS, Relyzer apps
-if [ -d $RELYZER_SHARED ]; then
+if [ -d $APPROXILYZER ]; then
     echo "Relyzer directory exists"
 else
     echo "No Relyzer directory. Add it to your .bashrc"
     exit 1
 fi
 
-if [ -d $GEMS_PATH_SHARED ]; then
+if [ -d $GEMS_PATH ]; then
     echo "GEMS_PATH directory exists"
 else
     echo "No GEMS_PATH directory. Add it to your .bashrc"
@@ -18,8 +18,8 @@ else
 fi
 
 
-dir=$GEMS_PATH_SHARED/emerald
-src=$RELYZER_SHARED/GEMS_modules/emerald
+dir=$GEMS_PATH/emerald
+src=$APPROXILYZER/GEMS_modules/emerald
 
 
 # checks if dir exists. Creates it if not, plus does symlinking

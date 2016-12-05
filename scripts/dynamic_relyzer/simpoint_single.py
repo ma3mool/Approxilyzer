@@ -17,8 +17,8 @@ if OPT_LEVEL == "fully_optimized" :
   BASE_CHECKPOINT = "/home/venktgr2/checkpts/opensolaris_intel_chkpt/optimized_apps/fully_optimized/apps_copied"
   #BASE_CHECKPOINT = "/shared/workspace/kahmed10/src_GEMS/simics_3_workspace/sol10-clean"
   #BASE_CHECKPOINT = "/shared/workspace/approx_comp/workloads/checkpoints/sol10-clean" #khalique checkpoint
-  WORKLOADS_PATH = os.environ.get('RELYZER_SHARED') + "/workloads/"
-  CHECKPOINT_DIR = os.environ.get('RELYZER_SHARED') + "/workloads/checkpoints/"
+  WORKLOADS_PATH = os.environ.get('APPROXILYZER') + "/workloads/"
+  CHECKPOINT_DIR = os.environ.get('APPROXILYZER') + "/workloads/checkpoints/"
 #  MAIN_LOG_DIR = "./fully_optimized_main_logs_new/"
   #MAIN_LOG_DIR = "./abdul_fully_optimized_main_logs_new/"
 #  MAIN_LOG_DIR = "./fully_optimized_main_logs_isca_2016/"
@@ -747,7 +747,7 @@ def run_new_all(app, phase, seqnum, pc, core=-1,  type=-1, bit=-1, stuck=-1, fau
     # init app detectors
     app_detectors.create_detectors(app)
     app_detectors.add_detector_locations(app)
-    filename = "/dev/null"
+#    filename = "/dev/null"
     SIM_hap_add_callback("Core_Breakpoint", app_detectors.core_break_pc, [filename, begin, app])
 
   if initial_skip == 1:
@@ -762,7 +762,8 @@ def run_new_all(app, phase, seqnum, pc, core=-1,  type=-1, bit=-1, stuck=-1, fau
   run_name = '%s.pc%s.p%s.c%s.t%s.b%s.s%s.r%s.d%s.%s' % (app, pc, pilot, core, type, bit, stuck, faultreg, srcdest, seqnum)
 
   if ARCH_INJ == 1:
-    filename = "/dev/null"
+ #   filename = "/dev/null"
+    filename = '%s/%s.pc%s.p%s.c%s.t%s.b%s.s%s.r%s.d%s.%s.completion_output' % (LOCAL_OUTPUT_DIR, app, pc, pilot, core, type, bit, stuck, faultreg, srcdest, seqnum)
     run_sim_command('c %d' %(INJ_INST))
     inject_trans_fault(pc, faultreg, bit, srcdest, type)
     if APP_DETECTORS == 1:
@@ -1126,7 +1127,7 @@ def core_exception(args, cpu, exp_num):
     FILE.write(line)
     FILE.write('\n')
     FILE.close()
-    print "exception HELLO3"
+    print "Fault detected : core_exception"
     print line
     run('quit 666')
 
@@ -1155,6 +1156,7 @@ def core_problem_pc(args, cpu, access, brknum, reg, size):
     FILE.close()
     print line
     print "Panic"
+    print "Fault detected : Panic"
     run('quit 666')
   elif(brknum==2):
     count = conf.cpu0.steps - args[1][conf.cpu0]
@@ -1165,6 +1167,7 @@ def core_problem_pc(args, cpu, access, brknum, reg, size):
     FILE.write('\n')
     FILE.close()
     print "Idle_Loop"
+    print "Fault detected : Idle_Loop"
     run('quit 666')
 
 def check_app_error(capture_log, filename, str):
@@ -1194,6 +1197,7 @@ def check_app_error(capture_log, filename, str):
     FILE.close()
     os.remove('%s'%(capture_log))
     print "exception: Detected Segmentation Fault "
+ #   print "Fault detected : Seg Fault"
     run('quit 666')
 
   search = "Bus Error"
@@ -1205,6 +1209,7 @@ def check_app_error(capture_log, filename, str):
     FILE.close()
     os.remove('%s'%(capture_log))
     print "exception: Detected Bus Error"
+ #  print "Fault detected : Bus Error"
     run('quit 666')
 
   search = "ERROR"
@@ -1216,6 +1221,7 @@ def check_app_error(capture_log, filename, str):
     FILE.close()
     os.remove('%s'%(capture_log))
     print "exception: Detected ERROR"
+ #  print "Fault detected : ERROR"
     run('quit 666')
 
 
@@ -1400,13 +1406,13 @@ def run_complete_new(app, phase, seqnum, pc, core=-1,  type=-1, bit=-1, stuck=-1
 # REMEMBER TO MAKE THIS SCALABLE GOLDEN
   #run('new-file-cdrom /home/sadve/shari2/outputs/fully_optimized_output.iso')
 #  run('new-file-cdrom /shared/workspace/approx_comp/workloads/iso/fully_optimized_output.iso')
-  run('new-file-cdrom /shared/workspace/approx_comp/workloads/iso/coverage_3_output.iso')
+  run('new-file-cdrom /shared/workspace/approx_comp/workloads/iso/coverage_2_output.iso')
 #  run('new-file-cdrom /shared/workspace/approx_comp/workloads/iso/blackscholes_input_outcomes.iso')
   run_inside_safe(' umount /mnt/cdrom ;magic_brk\n', filename)
   run('cd25B_2_6.eject ')
 #  run('cd25B_2_6.insert blackscholes_input_outcomes')
 #  run('cd25B_2_6.insert fully_optimized_output')
-  run('cd25B_2_6.insert coverage_3_output')
+  run('cd25B_2_6.insert coverage_2_output')
   run_inside_safe(' mount -F hsfs /dev/dsk/c0t6d0s0 /mnt/cdrom ;magic_brk\n', filename)
   run_inside_safe(' diff -c /mnt/cdrom/%s.output output.txt > test_out.txt; grep "No differences encounter" test_out.txt; magic_brk\n' %(app), filename)
   check_app_error(capture_log, filename, "")

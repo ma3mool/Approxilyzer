@@ -18,14 +18,14 @@ if [ $# -ne 2 ]; then
 fi
 
 # checks to make sure file certain paths exist. Relyzer, GEMS, and SIMICS, Relyzer apps
-if [ -d $RELYZER_SHARED ]; then
-    echo "Relyzer directory exists"
+if [ -d $APPROXILYZER ]; then
+    echo "APPROXILYZER directory exists"
 else
     echo "No Relyzer directory. Add it to your .bashrc"
     exit 1
 fi
 
-if [ -d $GEMS_PATH_SHARED ]; then
+if [ -d $GEMS_PATH ]; then
     echo "GEMS_PATH directory exists"
 else
     echo "No GEMS_PATH directory. Add it to your .bashrc"
@@ -40,7 +40,7 @@ else
 fi
 
 
-APPROXILYZER_SCRIPTS=$RELYZER_SHARED/scripts/approx_computing
+APPROXILYZER_SCRIPTS=$APPROXILYZER/scripts/approx_computing
 
 
 # Phase 1: generate SDC levels for each pilot

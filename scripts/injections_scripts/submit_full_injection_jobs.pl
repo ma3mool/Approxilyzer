@@ -13,10 +13,12 @@ print "Max Jobs = $MAX_JOBS\n";
 
 
 $num_args = $#ARGV+1;
-if($num_args != 1) {
-	print "Usage: ./submit_full_injection_jobs.pl <simics_file_list>\n";
+if($num_args != 2) {
+	print "Usage: ./submit_full_injection_jobs.pl <simics_file_list> <app_name>\n";
 	die;
 }
+my $app_name = $ARGV[1];
+print "App name: $app_name\n";
 open(JOB_LIST, "<$ARGV[0]");
 $go_to_sleep = 1;
 
@@ -26,7 +28,9 @@ if ($job_list_length =~/^(\d+)/ ) {
 }
 print "Total number of jobs: $num_jobs\n";
 
-my $job_sub_file = "$ENV{RELYZER_SHARED}/fault_list_output/condor_scripts/all_jobs_$num_jobs.condor";
+my $sdc_list_file = "$ENV{APPROXILYZER}/fault_list_output/injection_results/parallel_outcomes/sdc_tracking/$app_name.uniq_pcs";
+my $job_sub_file = "$ENV{APPROXILYZER}/fault_list_output/condor_scripts/all_jobs_$num_jobs.condor";
+my $saved_injections = 0;
 
 if($num_jobs == 0) {
 	exit(1);
@@ -43,10 +47,12 @@ while ($go_to_sleep == 1) {
 	# empty_slots = # nodes that are unclaimed and idle
 	# my_nodes = # of my jobs that are running.
 	
-	# num jobs on condor, not running
-    my $num_running_jobs = `condor_q amahmou2 | tail -1 | cut -d' ' -f1`;
-    #my $num_running_jobs = `condor_q venktgr2 | tail -1 | cut -d' ' -f1`;
-	$num_running_jobs = int($num_running_jobs);
+    # Track SDCs to stop injecting in future PCs already classified as SDC
+    `python track_sdcs.py $app_name`;
+    open my $handle, '<', $sdc_list_file;
+    chomp(my @sdc_list = <$handle>);
+    close $handle;
+    my %params = map { $_ => 1 } @sdc_list;
 
     # dynamically update number of condor jobs from file
     open my $file, '<', "max_jobs.txt";
@@ -54,11 +60,17 @@ while ($go_to_sleep == 1) {
     close $file;
 
 
+    # num jobs on condor, not running
+    my $num_running_jobs = `condor_q amahmou2 | tail -1 | cut -d' ' -f1`;
+    #my $num_running_jobs = `condor_q venktgr2 | tail -1 | cut -d' ' -f1`;
+	$num_running_jobs = int($num_running_jobs);
+
 	if ($num_running_jobs < $MAX_JOBS) {
     	$empty_slots = $MAX_JOBS-$num_running_jobs;
 	} else {
 		$empty_slots = 0;
 	}
+
 
 	if (($empty_slots>0) && (!eof(JOB_LIST))) {
 
@@ -66,7 +78,7 @@ while ($go_to_sleep == 1) {
 
 		print CONDOR_FILE "universe            = vanilla\n";
 		print CONDOR_FILE "requirements        = ((target.memory * 2048) >= ImageSize) && ((Arch == \"X86_64\") || (Arch == \"INTEL\"))\n";
-		print CONDOR_FILE "Executable          =  $ENV{RELYZER_SHARED}/scripts/injections_scripts/run_injection_job.pl\n";
+		print CONDOR_FILE "Executable          =  $ENV{APPROXILYZER}/scripts/injections_scripts/run_injection_job.pl\n";
         #	print CONDOR_FILE "Executable          =  /home/venktgr2/GEMS/simics/home/dynamic_relyzer/run_injection_job.pl\n";
 		print CONDOR_FILE "getenv              = true\n";
 		print CONDOR_FILE "notification = error\n\n";
@@ -85,6 +97,14 @@ while ($go_to_sleep == 1) {
 					next;
 				}
 
+                # do not inject in PCs already discovered as SDCs
+                @words = split /\./,$line;
+                if(exists($params{@words[1]})) 
+                {
+                    #skip it
+                    $saved_injections++;
+                    next;
+                }
 
 				$num_submitted_jobs++;
 				$num_per_job--;
@@ -123,6 +143,11 @@ while ($go_to_sleep == 1) {
 		system "condor_submit $job_sub_file";
 
 		printf "Progress : %.2f percent, Number of Submitted jobs : %d\n", ($num_submitted_jobs*100.0/$num_jobs, $num_submitted_jobs);
+        printf "Saved Injections: %d\n", ($saved_injections);
+        printf "SDC list (num of PCs): %d\n", (scalar(@sdc_list));
+		printf "Progress : %.2f percent, Number of Injections explored : %d\n", (($num_submitted_jobs+$saved_injections)*100.0/$num_jobs, $num_submitted_jobs+$saved_injections);
+        #printf "Injections explored: %d\n", ($num_submitted_jobs+$saved_injections);
+
 	}
 	if ($go_to_sleep) {
 		#$st = 10 + rand() * 100; # sleep time

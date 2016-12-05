@@ -19,7 +19,7 @@ fi
 
 ### DIR STRUCTURE ###
 
-DIR_0=$RELYZER_SHARED/workloads/apps/
+DIR_0=$APPROXILYZER/workloads/apps/
 
 if [[ ! -d $DIR_0/${5} ]]; then
     echo "No directory created for ${5} in workspace/app"

@@ -3,7 +3,7 @@ use Math::BigInt;
 use Time::HiRes qw(gettimeofday tv_interval);
 #use lib '/home/sadve/shari2/research/relyzer/perl/';
 #use lib '/shared/workspace/amahmou2/relyzer/perl/';
-use lib "$ENV{RELYZER_SHARED}/scripts/static_relyzer/scripts/perl"; #TODO MAKE SCALABLE
+use lib "$ENV{APPROXILYZER}/scripts/static_relyzer/scripts/perl"; #TODO MAKE SCALABLE
 use common_subs;
 
 #$MAIN_LOGS_DIR = "/home/sadve/shari2/GEMS/simics/home/dynamic_relyzer/fully_optimized_main_logs";
@@ -12,7 +12,7 @@ use common_subs;
 #$MAIN_LOGS_DIR = "/shared/workspace/amahmou2/Relyzer_GEMS/src_GEMS/simics/home/dynamic_relyzer/siva_fully_optimized_main_logs_new";
 #$MAIN_LOGS_DIR = "$ENV{GEMS_PATH_SHARED}/simics/home/dynamic_relyzer/output_log_input_independence/";
 
-$FAULT_LIST_DIR = "$ENV{RELYZER_SHARED}/fault_list_output/";
+$FAULT_LIST_DIR = "$ENV{APPROXILYZER}/fault_list_output/";
 $REFORMATTED_OUTPUT_DIR= "$FAULT_LIST_DIR/coverage_calculation/reformatted_outcomes/";
 $RESULTS_OUTPUT_DIR = "$FAULT_LIST_DIR/coverage_calculation/parsed_results/";
 
@@ -34,7 +34,7 @@ for ($i=0; $i<$numArgs ; $i++) {
 #print @apps;
 #print "app name is $app_name\n";
 
-$MAIN_LOGS_DIR = "$ENV{RELYZER_SHARED}/workloads/apps/$ARGV[0]/analysis_output/";
+$MAIN_LOGS_DIR = "$ENV{APPROXILYZER}/workloads/apps/$ARGV[0]/analysis_output/";
 
 #$INJECTION_TYPE="floats";
 #print "injection type is $INJECTION_TYPE\n";

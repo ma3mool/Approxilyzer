@@ -42,7 +42,7 @@ fi
 
 
 ### DIR STRUCTURE ###
-DIR_0=$RELYZER_SHARED/workloads/apps/
+DIR_0=$APPROXILYZER/workloads/apps/
 
 if [[ ! -d $DIR_0/${10} ]]; then
     mkdir $DIR_0/${10}

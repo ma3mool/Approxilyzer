@@ -17,7 +17,7 @@ my $app_name = $ARGV[0];
 #my $output_file = "/home/venktgr2/GEMS/simics/home/dynamic_relyzer/approximate_computing/detailed_pilots_sdc_outputs/use_def_prune/".$app_name."_def.outcomes";
 
 
-my $injection_results="$ENV{RELYZER_SHARED}/fault_list_output/injection_results/"; 
+my $injection_results="$ENV{APPROXILYZER}/fault_list_output/injection_results/"; 
 my $sdc_file ="$injection_results/parsed_results/${app_name}_all_sdcs.txt";
 my $outcome_file ="$injection_results/full_sdc_list/temp_files/${app_name}_just_sdcs.tmp";
 my $output_file = "$injection_results/full_sdc_list/temp_files/${app_name}_def.outcomes";

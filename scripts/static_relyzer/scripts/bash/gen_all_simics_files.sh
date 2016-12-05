@@ -9,7 +9,7 @@ fi
 
 ### DIR STRUCTURE ###
 
-DIR_0=$RELYZER_SHARED/workloads/apps/
+DIR_0=$APPROXILYZER/workloads/apps/
 
 if [[ ! -d $DIR_0/${1} ]]; then
     echo "No directory created for ${1} in workspace/app"
@@ -22,8 +22,8 @@ if [[ ! -d $DIR_0/${1}/analysis_output ]]; then
 fi
 
 LOG_PATH=${DIR_0}/${1}/analysis_output/                         # analysis directory
-INPUT_PATH=$RELYZER_SHARED/fault_list_output/                   # fault list
-PERL_PATH=$RELYZER_SHARED/scripts/static_relyzer/scripts/perl/  # perl script
+INPUT_PATH=$APPROXILYZER/fault_list_output/                   # fault list
+PERL_PATH=$APPROXILYZER/scripts/static_relyzer/scripts/perl/  # perl script
 
 
 if [ -d $INPUT_PATH ]; then 

@@ -3,13 +3,13 @@
 # This is the main approxilyzer script, used to generate fault injections, run
 # experiments, and analyze the output.
 # checks to make sure file certain paths exist. Relyzer, GEMS, and SIMICS, Relyzer apps
-if [ ! -d $RELYZER_SHARED ]; then
-    echo "No Relyzer directory. Add it to your .bashrc"
+if [ ! -d $APPROXILYZER ]; then
+    echo "No APPROXILYZER directory. Add it to your .bashrc"
     exit 1
 fi
 
-SIMICS_DIR=$GEMS_PATH_SHARED/simics/home/dynamic_relyzer/
-CHECKPOINT_DIR=$RELYZER_SHARED/workloads/checkpoints/
+SIMICS_DIR=$GEMS_PATH/simics/home/dynamic_relyzer/
+CHECKPOINT_DIR=$APPROXILYZER/workloads/checkpoints/
 RUN_SCRIPT_PATH=$CHECKPOINT_DIR/simics_files/
 
 ############################## MAKE AN ISO CHKPT ############################## 
@@ -23,7 +23,7 @@ if [[ $# -eq 2 && "$1" == "iso" ]]; then
 
 
     # create simics file
-    $RELYZER_SHARED/scripts/start_scripts/make_iso_chkpt.sh $2
+    $APPROXILYZER/scripts/start_scripts/make_iso_chkpt.sh $2
 
     # runs simics file
     cd $SIMICS_DIR
@@ -40,7 +40,7 @@ elif [[ $# -eq 4 && "$1" == "run" ]]; then
     fi
     
     # create simics file
-    $RELYZER_SHARED/scripts/start_scripts/make_app_chkpt.sh $2 $3 $4
+    $APPROXILYZER/scripts/start_scripts/make_app_chkpt.sh $2 $3 $4
 
     cd $SIMICS_DIR
     ./simics -stall $RUN_SCRIPT_PATH/make_app_run_ckpt_${3}_${4}.simics

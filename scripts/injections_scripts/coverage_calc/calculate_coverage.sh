@@ -2,9 +2,9 @@
 
 # runs very similarly to gen_reformatted_output, with the intention of finding population
 
-DIR=$RELYZER_SHARED/scripts/injections_scripts/coverage_calc
-INPUT_DIR=$RELYZER_SHARED/fault_list_output/simics_file_list
-OUTPUT_DIR=$RELYZER_SHARED/fault_list_output/coverage_calculation
+DIR=$APPROXILYZER/scripts/injections_scripts/coverage_calc
+INPUT_DIR=$APPROXILYZER/fault_list_output/simics_file_list
+OUTPUT_DIR=$APPROXILYZER/fault_list_output/coverage_calculation
 
 if [ -d $DIR ]; then
     echo "Directory found"

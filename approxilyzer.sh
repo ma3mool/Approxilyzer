@@ -4,21 +4,21 @@
 # experiments, and analyze the output.
 
 
-# checks to make sure file certain paths exist. Relyzer, GEMS, and SIMICS, Relyzer apps
+# checks to make sure file certain paths exist. Approxilyzer, GEMS, and SIMICS, Approxilyzer apps
 ERROR=0;
-if [ -d $RELYZER_SHARED ]; then
+if [ -d $APPROXILYZER ]; then
     let ERROR=0
 else
     let ERROR=1
-    echo "No Relyzer directory. Add it to your .bashrc"
+    echo "No Approxilyzer directory. Add it to your .bashrc"
     exit 1
 fi
 
-if [ -d $GEMS_PATH_SHARED ]; then
+if [ -d $GEMS_PATH ]; then
     let ERROR=0
 else
     let ERROR=1
-    echo "No GEMS directory. Add it to your .bashrc"
+    echo "No GEMS_PATH directory. Add it to your .bashrc"
     exit 1
 fi
 
@@ -96,23 +96,36 @@ fi
 if  $sflag && !$Iflag && !$cflag && !$rflag && !$iflag && !$vflag && !$Aflag && !$aflag
 then
 # ensure directory structure is correct. create it otherwise
-   # # dir_setup.sh
-    # TODO
-   echo "Running the start script!"
+    echo "Preparing Approxilyzer!"
+    $APPROXILYZER/scripts/start_scripts/dir_setup.sh
+   
+    # install emerald
+    $APPROXILYZER/scripts/start_scripts/emerald_init.sh
+    $GEMS_PATH/emerald/makesymlinks_emerald.sh
+    EMERALD=$GEMS_PATH/emerald/
+    cd $EMERALD
+    make clean
+    make module DESTINATION=dynamic_relyzer PHASE=1
+    cd $GEMS_PATH/simics
+    make emerald
+
+    # local symlink of simpoint.py
+    ln -s $APPROXILYZER/scripts/dynamic_relyzer/simpoint.py $GEMS_PATH/simics/home/dynamic_relyzer/simpoint.py
+
     exit 0
 
 # make a new iso
 elif  ! $sflag && $Iflag && ! $cflag && ! $rflag && ! $iflag && ! $vflag && ! $Aflag && ! $aflag
 then
     echo "Making new ISO checkpoint for $isoName"
-    $RELYZER_SHARED/scripts/primary_scripts/mkchkpt.sh iso $isoName
+    $APPROXILYZER/scripts/primary_scripts/mkchkpt.sh iso $isoName
     exit 0
 
 # make a new app checkpoint in the iso
 elif  ! $sflag && $Iflag && $cflag && ! $rflag && ! $iflag && ! $vflag && ! $Aflag && $aflag
 then
     echo "Making new app checkpoint for $app_name running script $run_script_name from $isoName"
-    $RELYZER_SHARED/scripts/primary_scripts/mkchkpt.sh run $isoName $app_name $run_script_name
+    $APPROXILYZER/scripts/primary_scripts/mkchkpt.sh run $isoName $app_name $run_script_name
     exit 0
 
 # run Relyzer script
@@ -121,16 +134,16 @@ then
     echo "Running relyzer script for $app_name with $rValue"
     if [ "$rValue" == "prof" ]
     then
-        $RELYZER_SHARED/scripts/primary_scripts/relyzer_fault_generation.sh $app_name 1
+        $APPROXILYZER/scripts/primary_scripts/relyzer_fault_generation.sh $app_name 1
     elif [ "$rValue" == "anals" ]
     then
-        $RELYZER_SHARED/scripts/primary_scripts/relyzer_fault_generation.sh $app_name 2
+        $APPROXILYZER/scripts/primary_scripts/relyzer_fault_generation.sh $app_name 2
     elif [ "$rValue" == "fault_gen" ]
     then
-        $RELYZER_SHARED/scripts/primary_scripts/relyzer_fault_generation.sh $app_name 3
+        $APPROXILYZER/scripts/primary_scripts/relyzer_fault_generation.sh $app_name 3
     elif [ "$rValue" == "int_ckpt" ]
     then
-        $RELYZER_SHARED/scripts/primary_scripts/relyzer_fault_generation.sh $app_name 4
+        $APPROXILYZER/scripts/primary_scripts/relyzer_fault_generation.sh $app_name 4
     else
         echo "Incorrect option passed to Relyzer analysis."
         print_usage
@@ -142,13 +155,13 @@ then
 elif  ! $sflag && ! $Iflag && ! $cflag && ! $rflag && $iflag && ! $vflag && ! $Aflag && $aflag
 then
     echo "Running injection script for $app_name with $iValue"
-    if [ "$iValue" == "prof" ]
+    if [ "$iValue" == "prep" ]
     then
-        $RELYZER_SHARED/scripts/primary_scripts/relyzer_injections.sh $app_name 1
+        $APPROXILYZER/scripts/primary_scripts/relyzer_injections.sh $app_name 1
     elif [ "$iValue" == "results" ]
     then
-        $RELYZER_SHARED/scripts/primary_scripts/relyzer_injections.sh $app_name 2
-        $RELYZER_SHARED/scripts/primary_scripts/relyzer_injections.sh $app_name 3
+        $APPROXILYZER/scripts/primary_scripts/relyzer_injections.sh $app_name 2
+        $APPROXILYZER/scripts/primary_scripts/relyzer_injections.sh $app_name 3
     else
         echo "Incorrect option passed to injections scripts"
         print_usage
@@ -161,12 +174,12 @@ then
 elif  ! $sflag && ! $Iflag && ! $cflag && ! $rflag && ! $iflag && $vflag && ! $Aflag && $aflag
 then
     echo "Running validation script for $app_name with $vValue"
-    if [ "$vValue" == "prof" ]
+    if [ "$vValue" == "prep" ]
     then
-        $RELYZER_SHARED/scripts/primary_scripts/relyzer_validation.sh $app_name 1
+        $APPROXILYZER/scripts/primary_scripts/relyzer_validation.sh $app_name 1
     elif [ "$vValue" == "results" ]
     then
-        $RELYZER_SHARED/scripts/primary_scripts/relyzer_validation.sh $app_name 2
+        $APPROXILYZER/scripts/primary_scripts/relyzer_validation.sh $app_name 2
     else
         echo "Incorrect option passed to validation scripts"
         print_usage
@@ -188,6 +201,6 @@ fi
 
 
 
-INJECTION_SCRIPTS=$RELYZER_SHARED/scripts/injections_scripts
-INJECTION_RESULTS=$RELYZER_SHARED/fault_list_output/injection_results
+INJECTION_SCRIPTS=$APPROXILYZER/scripts/injections_scripts
+INJECTION_RESULTS=$APPROXILYZER/fault_list_output/injection_results
 
