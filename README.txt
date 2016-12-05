@@ -150,30 +150,43 @@ Once you have a base checkpoint, edit the top of $APPROXILYZER/scripts/dynamic_r
 2) Copy the content of the golden ISO and place it in $RELYZER/workloads/golden_output/ 
 directory.
 3) Make a checkpoint for the whole iso:
-    $ ./approxilyzer -I [iso_name]
+    $ ./approxilyzer.sh -I [iso_name]
 4) Make a checkpoint for each application you want to run Approxilyzer on:
-    $ ./approxilyzer -a [app_name] -c [associated run_script_name]
-
+    $ ./approxilyzer.sh -a [app_name] -c [associated run_script_name]
+5) Edit simpoint.py with the ISO_OUTPUT name. If you are using our example, that is "apps_output".
 
 
 GENERATING A FAULT LIST:
 1) Make a new directory for the application inside $RELYZER_SHARED/workloads/apps/
-The naming convention should be [app_name]_[run_script_name]
-2) Inside this new directory, place the binary and disassembly file.
+The naming convention should be [app_name]_[run_script_name] for the directory.
+2) Inside this new directory, place the binary and disassembly file. 
+    The binary and dis file should both have the same name (and case) as the directory.
+    For example: 
+        ../workloads/apps/blackscholes_simlarge/blackscholes_simlarge
+        ../workloads/apps/blackscholes_simlarge/blackscholes_simlarge.dis
 3) Run Approxilyzer static analysis phase 1:
-    $ ./approxilyzer -r prof -a [app_name]
+    $ ./approxilyzer.sh -r prof -a [app_name]
 4) You should be prompted to edit a newly generated file inside the apps directory.
 Follow the instructions in the prompt. 
 5) Rerun the application profiler:
-    $ ./approxilyzer -r prof -a [app_name]
+    $ ./approxilyzer.sh -r prof -a [app_name]
 6) Once done, run the dynamic analysis phase:
-    $ ./approxilyzer -r anlys -a [app_name]
+    $ ./approxilyzer.sh -r anlys -a [app_name]
 7) In the config file, you can now make some optimizations that are highly recommended
+    a) Edit $APPROXILYZER/scripts/static_scripts/src/config.h
+        Make two changes here, one for heap and one for stack.
+        The #define value indicates how many bits are explored by the heap
+        and the stack. This information can be gathered from looking at the 
+        heap and stack output in workloads/apps/[app_name]/analysis_output/
+    b) Edit $APPROXILYZER/scripts/static_scripts/src/common_functions.h
+        There should be three edits for each app. Follow the examples included.
+    If you decide to forego these optimizations, Approxilyzer will still function 
+    correctly. However, the number of error injections will be much higher.
 8) Run error site generation:
-    $ ./approxilyzer -r fault_gen -a [app_name]
+    $ ./approxilyzer.sh -r fault_gen -a [app_name]
 9) Generate intermediate SIMICS checkpoints for improved performance during injection:
-    $ ./approxilyzer -r int_ckpt -a [app_name]
-10) You are now done! The fault list should be located inside $RELYZER_SHARED/results/
+    $ ./approxilyzer.sh -r int_ckpt -a [app_name]
+10) You are now done! The fault list should be located inside $RELYZER_SHARED/fault_list_output/
 
 
 RUNNING RELYZER FAULT INJECTIONS:
@@ -184,10 +197,10 @@ parallel.
     $ cd scripts/injections_scripts/
     $ ./run_injection_jobs.pl [injection]
 Alternatively, you can use a parallel script which calls run_injection_jobs using condor
-    $ ./submit_full_injection_jobs.pl
+    $ ./submit_full_injection_jobs.pl // our sample script. Tune to your own needs
 3) Once injections are done (this may take some time), collect the results and analyze:
     $ ./approxilyzer -i results -a [app_name]
-4) Results should now be at $RELYZER_SHARED/results/injection_results/parsed_results/
+4) Results should now be at $RELYZER_SHARED/results/injection_results/
 
 
 RUNNING APPROXILYZER ANALYSIS:
