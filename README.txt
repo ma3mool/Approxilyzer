@@ -23,13 +23,13 @@ APPROXILYZER REQUIREMENTS
 SETTING UP ENVIRONMENT
 ==========================================================
 1) Download and untar GEMS into a local directory.  
-    You can find this at [Wisconsin MultiFacet GEMS](http://research.cs.wisc.edu/gems/), or use our [tarball](https://rsim.cs.illinois.edu/approxilyzer/GEMS_Approxilyzer.tar) 
+    You can find this at http://research.cs.wisc.edu/gems/, or use our tarball at https://rsim.cs.illinois.edu/approxilyzer/GEMS_Approxilyzer.tar
 2) Append the following two lines to your .bashrc:
     GEMS_PATH=/full/path/to/src_GEMS
     export GEMS_PATH
 3) Download SIMICS 3.0.31. Untar locally. 
     Instructions on how to obtain a SIMICS academic license can be 
-    found [here](http://research.cs.wisc.edu/gems/GEMS-Ubuntu.pdf).
+    found at http://research.cs.wisc.edu/gems/GEMS-Ubuntu.pdf.
 4) Make a directory for SIMICS installation alongside $GEMS_PATH
     $ cd $GEMS_PATH
     $ cd ../
@@ -132,7 +132,7 @@ You can test the mount locally with:
 
 We provide a template application ISO and golden ISO with the distribution loading 
 some PARSEC and SPLASH-2 benchmarks. 
-
+Download here: https://rsim.cs.illinois.edu/approxilyzer/fully_optimized.iso
 
 
 PREPARING SIMICS CHECKPOINTS:
