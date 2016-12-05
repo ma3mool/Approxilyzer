@@ -1,27 +1,14 @@
 APPROXILYZER
 =========================================================
-Approxilyzer is an open-source framework for instruction level approximation
-and resiliency software. Approxilyzer employs Relyzer analysis to discover
-SDC-causing instructions, and qualifies each SDC instruction with a quality.
-The user can use this information to protect vulnerable instructions,
-approximate instructions with low output quality degredation, or use this 
-information for other innovative techniques.
 
-Approxilyzer and Relyzer were developed at the University of Illinois at 
-Urbana-Champaign by the RSIM research group led by Dr. Sarita Adve. The 
-source-software is publicly available under the Illinois License. 
+Approxilyzer is an open-source framework for instruction level approximation 
+and resiliency software. Approxilyzer provides a systematic way to identify 
+instructions that exhibit first-order approximation potential. It can also identify 
+silent data corruption (SDC) causing instructions in the presence of single-bit errors. 
+Approxilyzer employs static and dynamic analysis, in addition to heuristics, to reduce 
+the run-time of finding Approximate instructions and SDC-causing instructions by 3-6x 
+orders of magnitude.
 
-Please cite our papers when you publish results that you have obtained
-using Approxilyzer:
-
-1) Siva Kumar Sastry Hari, Sarita V. Adve, Helia Naeimi, and Pradeep Ramachandran. 
-2012. Relyzer: exploiting application-level fault equivalence to analyze application 
-resiliency to transient faults. In ASPLOS XVII. ACM, New York, NY, USA, 123-134. 
-DOI=http://dx.doi.org/10.1145/2150976.2150990
-
-2) Radha Venkatagiri, Abdulrahman Mahmoud, Siva Kumar Sastry Hari, Sarita V. Adve. 
-2016. Approxilyzer: Towards A Systematic Framework for Instruction-Level Approximate 
-Computing and its Application to Hardware Resiliency. In MICRO 49.
 
 
 
@@ -35,15 +22,17 @@ APPROXILYZER REQUIREMENTS
 
 SETTING UP ENVIRONMENT
 ==========================================================
-IF YOU ALREADY HAVE GEMS AND SIMICS SET UP, YOU CAN SKIP THIS INSTALLATION STEP.
-
-1) Download and untar GEMS into a local directory
+1) Download and untar GEMS into a local directory.  
+    You can find this at http://research.cs.wisc.edu/gems/, or use our tarball at:
+    https://rsim.cs.illinois.edu/approxilyzer/GEM_Approxilyzer.tar 
 2) Append the following two lines to your .bashrc:
     GEMS=/full/path/to/src_GEMS
     export GEMS
-3) Download SIMICS 3.0.31. Untar locally.
-4) Make a directory for SIMICS installation in GEMS
+3) Download SIMICS 3.0.31. Untar locally. 
+    Instructions on how to obtain SIMICS can be found here: http://research.cs.wisc.edu/gems/GEMS-Ubuntu.pdf
+4) Make a directory for SIMICS installation alongside $GEMS
     $ cd $GEMS
+    $ cd ../
     $ mkdir simics
 5) When prompted during the SIMICS installation, provide the absolute path
 to the directory just created in Step 4
@@ -51,18 +40,22 @@ to the directory just created in Step 4
     SIMICS_INSTALL=/full/path/to/simics/simics-3.0.31
     export SIMICS_INSTALL
 7) Follow the instructions from GEMS site for setting up SIMICS.
-Screenshots are available here TODO.
+    http://research.cs.wisc.edu/gems/doc/gems-wiki/moin.cgi/Setup_for_Simics_3.0.X 
 8) In common/Makefile.common, under the amd64-linux, use the following settings 
 for various flags:
     CC = /usr/bin/g++34
     OPT_FLAGS=-m64 -march-opetron -fPIC
     LDFLAGS += -WI, -R/usr/lib64
     MODULE_LDFLAGS += -WI, -R/usr/lib64
-9) Also update the variable SIMICS_INCLUDE_ROOT in Makefile.common to point to the 
+9) Update the variable SIMICS_INCLUDE_ROOT in Makefile.common to point to the 
 /src/include directory. Change the $(GEMS_ROOT) and fully elaborate the path name.
 10) In $GEMS/scripts/prepare_simics_home.sh, change
     x86-linux -> amd64-linux
     ../sarek/simics -> ../../simics
+
+
+
+
 11) Copy our provided Opal version, and then install Opal using:
     $ cd $GEMS/opal
     $ make clean
