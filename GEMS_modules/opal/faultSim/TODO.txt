@@ -1,0 +1,9 @@
+- the encoding/decoding scheme should be optimized
+- there is some redundancy regarding gate additions for fault injectio:
+	- constant values are represented with constant output gates
+	- if the fault is to be injected at the output, the output buffer can be deleted (which is kept in the current implementation)
+- the controllability and observability values are unneccessarily kept and processed, there is room for file format 
+optimization as well: most imformation provided in a .lev file is redundant, .bench sounds better
+
+- if .v can be transformed to .bench - there are perl scripts for parsing verilog code, this simulator is reliable
+for saf simulations...

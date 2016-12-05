@@ -1,0 +1,11 @@
+#!/bin/csh
+
+set decoder_file_name=decode_unit_MAPPED.v
+
+echo -n '#### ncvlog -nolog -nocopyright -quiet verilog/tester.v verilog/'
+echo -n $decoder_file_name 
+echo ' std_cell_models/*.v' ;
+echo ' '
+echo ' '
+ncvlog -nolog -nocopyright -quiet verilog/tester.v verilog/$decoder_file_name std_cell_models/*.v
+

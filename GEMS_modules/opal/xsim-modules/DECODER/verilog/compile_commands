@@ -1,0 +1,12 @@
+#!/bin/bash
+
+echo "Use this only if you want to run some testing locally" ;
+
+echo "ncvlog -nolog -nocopyright tester.v decode_unit_flat.v ../std_cell_models/*.v" ;
+ncvlog -nolog -nocopyright tester.v decode_unit_flat.v ../std_cell_models/*.v ;
+
+echo "## ncelab -nocopyright tester -delay_mode distributed -timescale 1ns/1ps -access +w" ;
+ncelab -nocopyright tester -delay_mode distributed -timescale 1ns/1ps -access +w ;
+
+echo "## ncsim -MESSAGES -nocopyright tester" ;
+ncsim -nolog -MESSAGES -nocopyright tester ;

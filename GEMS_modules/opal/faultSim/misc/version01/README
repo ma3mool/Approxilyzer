@@ -1,0 +1,31 @@
+.vec> A B cin
+PILIst> A0 B0 cin A1 B1 A2 B2 .... A31 B31
+
+.out> S 
+POList> S0 S1 ... Cout S31
+
+
+- it should be avoided that the design is read from the file each time the low level simulator gets invoked
+- interprocess communication - the simulator as a child process e.g. waits for a termination signal from the parent
+
+
+- make sure that only addition causes the low level simulator to be invoked
+(eliminate logical operations and multiplication)
+
+
+- GEMS: 
+	an int ALU operation is encountered and and addition is needed - invoke the low level simulator
+									within a child process
+	pass 2 64 bits operands to the child - possibly over pipes
+	wait for the child to process the inputs
+	when the output gets returned, wake up, and continue with high level simulation
+
+	(implement as a stub module first)
+
+- GATE LEVEL SIMULATOR:
+	
+	(invocation for the first time as a child process of the high level simulator)
+	wait for the parent to wake it up - blocking reading of pipe e.g., since no one depends on the child
+	read 2 operands from the pipe - process them, send the result back to the parent
+	wait for the parent for next wake-up
+	

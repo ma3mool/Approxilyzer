@@ -1,0 +1,26 @@
+include ./macros
+include $(INSTALL_DIR)/tools/pliwizard/src/Makefile.nc.lnx86
+include $(INSTALL_DIR)/tools/pliwizard/src/Makefile.nc.defines
+
+
+TARGETDIR       = .
+SOURCEDIR       = $(TARGETDIR)/vpi
+
+O_TARGETS       = $(TARGETDIR)
+
+FIRST_TARGET    = $(VPILIB)
+
+
+HAND_SHAKE_C    = $(SOURCEDIR)/hand_shake.c
+VPI_USER_C      = $(SOURCEDIR)/vpi_user.c
+VPI_OBJECTS     = $(SOURCEDIR)/hand_shake.$(OBJ_POSTFIX)
+
+# $(VPI_OBJECTS): $(HAND_SHAKE_C)
+# 	gcc -c -o $(VPI_OBJECTS) $(HAND_SHAKE_C)
+
+CLEAN_OBJECTS=   \
+                 $(VPI_OBJECTS) $(_VPI_USER_O)
+
+CLEAN_TARGETS=   $(VPILIB)
+
+include $(INSTALL_DIR)/tools/pliwizard/src/Makefile.nc.targets

@@ -1,0 +1,5 @@
+echo '###### Executing ncvlog -nolog -nocopyright -quiet verilog/sparc_exu_MAPPED.v verilog/tester.v std_cell_models/*.v'
+echo ' '
+echo ' '
+ncvlog -nolog -nocopyright -quiet verilog/sparc_exu_MAPPED.v verilog/tester.v std_cell_models/*.v
+

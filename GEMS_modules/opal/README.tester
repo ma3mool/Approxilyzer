@@ -1,0 +1,26 @@
+
+This readme describes how to run opal in stand-alone trace mode
+
+
+1. First, make opal as usual, using 'make module DESTINATION=XXX'
+
+2. In the README file, look at the last section and it shows you how
+to take a trace from opal.  
+
+3. After you took a trace, you'd notice that *app-trace files are
+generated.
+
+4. In opal dir, do 'make makeipage ; make tester'
+
+5. In opal dir, do 'x86-linux/bin/makeipage.exec ...' The command
+shows you what args to use.
+
+6. At this point, you have everything you need to run stand-alone
+opal. To do so, in opal dir, do 'x86-linux/bin/tester.exec ...' and
+use the appropriate args.
+
+Here, and we are done! :)
+
+Regards,
+Alex Li
+

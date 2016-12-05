@@ -1,0 +1,7 @@
+#!/bin/csh
+
+echo '###### Executing ncvlog -nolog -nocopyright -quiet verilog/*.v std_cell_models/*.v'
+echo ' '
+echo ' '
+ncvlog -nolog -nocopyright -quiet verilog/*.v std_cell_models/*.v
+

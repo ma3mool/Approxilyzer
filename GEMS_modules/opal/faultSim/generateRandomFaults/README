@@ -1,0 +1,5 @@
+Provide the design as a .lev file, and change the file name string in the program
+
+If a .lev file cannot be provided, the number of gates in the design should be known - possibly after a post synthesis
+analysis (the number of outputs of ech gate is required as well)
+In this case going for line numbers seems to be much more effective!

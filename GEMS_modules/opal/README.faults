@@ -1,0 +1,31 @@
+Files where fault injections are located
+----------------------------------------
+
+1) Decoder fault - Stuck@fault in the input latch - system/statici.C (in decodeInstruction() )
+2) ALU faults (FPU, Int unit, etc) - stuck@fault in output latch - system/dynamic.C (in function Execute())
+3) File in data bus of register file - stuck@fault in data line - system/regfile.h (in function setInt())
+4) Physical reg file errors - system/arf.C (in readInt64() functions of all the arf types)
+5) File in register file - stuck@fault in particular reg- system/regfile.h (in function setInt())
+
+TODO - 
+6) Fault in ROB - system/iwindow.C in function iwindow_t::insertInstruction(). But it just assigns an object. How to target bits?
+7) BTB faults - Ask Alex where this is put
+
+Python scripts for running the fault injector
+---------------------------------------------
+The following commands have been added to opal
+1. opal0.fault-type <faulttype>
+	The numbers for the types of faults are
+	#define DECODER_INPUT_FAULT 	0
+	#define INTALU_OUTPUT_FAULT		1
+	#define FPALU_OUTPUT_FAULT		2
+	#define	REG_DATA_LINE_FAULT		3
+	#define	REG_FILE_FAULT			4
+
+2. opal0.fault-bit <bit>
+3. opal0.fault-stuck-at <stuck@>
+4. opal0.faulty-reg-no <regno>
+	This is used only for fault-type 4.
+5. opal0.fault-stats - Prints the fault statistics, like total bit flips caused, total masked, etc.
+
+I havent put any checks in. So, be careful when setting numbers. Things might crash :).
