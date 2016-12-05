@@ -28,9 +28,7 @@ if ($job_list_length =~/^(\d+)/ ) {
 }
 print "Total number of jobs: $num_jobs\n";
 
-my $sdc_list_file = "$ENV{APPROXILYZER}/fault_list_output/injection_results/parallel_outcomes/sdc_tracking/$app_name.uniq_pcs";
 my $job_sub_file = "$ENV{APPROXILYZER}/fault_list_output/condor_scripts/all_jobs_$num_jobs.condor";
-my $saved_injections = 0;
 
 if($num_jobs == 0) {
 	exit(1);
@@ -47,12 +45,6 @@ while ($go_to_sleep == 1) {
 	# empty_slots = # nodes that are unclaimed and idle
 	# my_nodes = # of my jobs that are running.
 	
-    # Track SDCs to stop injecting in future PCs already classified as SDC
-    `python track_sdcs.py $app_name`;
-    open my $handle, '<', $sdc_list_file;
-    chomp(my @sdc_list = <$handle>);
-    close $handle;
-    my %params = map { $_ => 1 } @sdc_list;
 
     # dynamically update number of condor jobs from file
     open my $file, '<', "max_jobs.txt";
@@ -97,14 +89,6 @@ while ($go_to_sleep == 1) {
 					next;
 				}
 
-                # do not inject in PCs already discovered as SDCs
-                @words = split /\./,$line;
-                if(exists($params{@words[1]})) 
-                {
-                    #skip it
-                    $saved_injections++;
-                    next;
-                }
 
 				$num_submitted_jobs++;
 				$num_per_job--;
@@ -143,10 +127,6 @@ while ($go_to_sleep == 1) {
 		system "condor_submit $job_sub_file";
 
 		printf "Progress : %.2f percent, Number of Submitted jobs : %d\n", ($num_submitted_jobs*100.0/$num_jobs, $num_submitted_jobs);
-        printf "Saved Injections: %d\n", ($saved_injections);
-        printf "SDC list (num of PCs): %d\n", (scalar(@sdc_list));
-		printf "Progress : %.2f percent, Number of Injections explored : %d\n", (($num_submitted_jobs+$saved_injections)*100.0/$num_jobs, $num_submitted_jobs+$saved_injections);
-        #printf "Injections explored: %d\n", ($num_submitted_jobs+$saved_injections);
 
 	}
 	if ($go_to_sleep) {
