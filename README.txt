@@ -9,7 +9,7 @@ Approxilyzer employs static and dynamic analysis, in addition to heuristics, to 
 the run-time of finding Approximate instructions and SDC-causing instructions by 3-6x 
 orders of magnitude.
 
-Project overview can be viewed at: https://rsim.cs.illinois.edu/approxilyzer
+Project overview can be viewed at: rsim.cs.illinois.edu/approxilyzer
 
 
 
@@ -128,13 +128,13 @@ When generating the ISO, you can use the following command in a terminal:
     $ mkisofs -RJ -o <filename>.iso <directory/with/required/files>
 
 You can test the mount locally with:
-    $ mount - loop <filename>.iso /mnt/point/here
+    $ mount -o loop <filename>.iso /mnt/point/here
 
 
 We provide a template application ISO and golden ISO with the distribution loading 
 some PARSEC and SPLASH-2 benchmarks. 
-Fully Opimized ISO: rsim.cs.illinois.edu/approxilyzer/fully_optimized.iso
-Fully Opimized Output ISO: rsim.cs.illinois.edu/approxilyzer/fully_optimized_output.iso
+Apps ISO: rsim.cs.illinois.edu/approxilyzer/apps.iso
+Apps Output ISO: rsim.cs.illinois.edu/approxilyzer/apps_output.iso
  
 
 
