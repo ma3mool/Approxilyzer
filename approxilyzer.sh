@@ -135,7 +135,7 @@ then
     if [ "$rValue" == "prof" ]
     then
         $APPROXILYZER/scripts/primary_scripts/relyzer_fault_generation.sh $app_name 1
-    elif [ "$rValue" == "anals" ]
+    elif [ "$rValue" == "anlys" ]
     then
         $APPROXILYZER/scripts/primary_scripts/relyzer_fault_generation.sh $app_name 2
     elif [ "$rValue" == "fault_gen" ]

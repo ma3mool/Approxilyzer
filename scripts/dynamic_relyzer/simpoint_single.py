@@ -1,22 +1,16 @@
 import time, sim_commands, string, sys, getpass, os, filecmp, random, struct
 from cli import *
 from collections import deque
-# import blackscholes_brpc_list, lu_brpc_list, fft_brpc_list, swaptions_brpc_list, brk_list
-# import blackscholes_patterns, swaptions_patterns, lu_patterns, fft_patterns, omnetpp_patterns, libquantum_patterns, gcc_patterns
 
 
-#OPT_LEVEL = "fully_optimized"
 OPT_LEVEL = "fully_optimized"
 APP_DETECTORS = 0
 ARCH_INJ = 1 # ARCH_INJ injects fault directly in simics, without using opal
 MICROARCH_INJECTIONS = 0 # injects faults in microarch units
+ISO_OUTPUT="coverage_2" # Output ISO name, used for golden output comparison
+BASE_CHECKPOINT = "/home/venktgr2/checkpts/opensolaris_intel_chkpt/optimized_apps/fully_optimized/apps_copied" # Base checkpoint, used to make subsequent chkpts
 
 if OPT_LEVEL == "fully_optimized" :
-#  CHECKPOINT_DIR = "/shared/workspace/amahmou2/Relyzer_GEMS/src_GEMS/simics/checkpoints/parsec_mini_abdul/"
-#  CHECKPOINT_DIR = "/shared/workspace/amahmou2/Relyzer_GEMS/src_GEMS/simics/checkpoints/fully_optimized_from_siva/"
-  BASE_CHECKPOINT = "/home/venktgr2/checkpts/opensolaris_intel_chkpt/optimized_apps/fully_optimized/apps_copied"
-  #BASE_CHECKPOINT = "/shared/workspace/kahmed10/src_GEMS/simics_3_workspace/sol10-clean"
-  #BASE_CHECKPOINT = "/shared/workspace/approx_comp/workloads/checkpoints/sol10-clean" #khalique checkpoint
   WORKLOADS_PATH = os.environ.get('APPROXILYZER') + "/workloads/"
   CHECKPOINT_DIR = os.environ.get('APPROXILYZER') + "/workloads/checkpoints/"
 #  MAIN_LOG_DIR = "./fully_optimized_main_logs_new/"
@@ -1406,13 +1400,15 @@ def run_complete_new(app, phase, seqnum, pc, core=-1,  type=-1, bit=-1, stuck=-1
 # REMEMBER TO MAKE THIS SCALABLE GOLDEN
   #run('new-file-cdrom /home/sadve/shari2/outputs/fully_optimized_output.iso')
 #  run('new-file-cdrom /shared/workspace/approx_comp/workloads/iso/fully_optimized_output.iso')
-  run('new-file-cdrom /shared/workspace/approx_comp/workloads/iso/coverage_2_output.iso')
+#  run('new-file-cdrom /shared/workspace/approx_comp/workloads/iso/apps_output.iso')
+  run('new-file-cdrom /shared/workspace/approx_comp/workloads/iso/%s'%(ISO_OUTPUT))
 #  run('new-file-cdrom /shared/workspace/approx_comp/workloads/iso/blackscholes_input_outcomes.iso')
   run_inside_safe(' umount /mnt/cdrom ;magic_brk\n', filename)
   run('cd25B_2_6.eject ')
 #  run('cd25B_2_6.insert blackscholes_input_outcomes')
 #  run('cd25B_2_6.insert fully_optimized_output')
-  run('cd25B_2_6.insert coverage_2_output')
+#  run('cd25B_2_6.insert apps_output')
+  run('cd25B_2_6.insert %s'%(ISO_OUTPUT))
   run_inside_safe(' mount -F hsfs /dev/dsk/c0t6d0s0 /mnt/cdrom ;magic_brk\n', filename)
   run_inside_safe(' diff -c /mnt/cdrom/%s.output output.txt > test_out.txt; grep "No differences encounter" test_out.txt; magic_brk\n' %(app), filename)
   check_app_error(capture_log, filename, "")

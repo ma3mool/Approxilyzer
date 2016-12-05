@@ -57,12 +57,6 @@ do
 		do
 			echo "$file"
 			perl -w $PERL_PATH/gen_all_simics_files.pl $app $file $LOG_PATH/${1}_modes.txt $LOG_PATH/${1}-heap-classes.output  $LOG_PATH/${1}-stack-classes.output $LOG_PATH/${1}_sample_control_pc_patterns_50_5000.txt  $f_type; 
-			#perl -w perl/gen_all_simics_files.pl $app $file $LOG_PATH/$app*_modes.txt $LOG_PATH/$app*-heap-classes.output  $LOG_PATH/$app*-stack-classes.output $LOG_PATH/$app*_sample_control_pc_patterns_50_5000.txt  $f_type; 
-			#perl -w perl/gen_all_simics_files.pl $app $file $LOG_PATH/$app*_modes.txt $LOG_PATH/$app*-heap-classes.output  $LOG_PATH/$app*-stack-classes.output /home/sadve/shari2/GEMS/simics/home/dynamic_relyzer/pickle_dir/consolidated/$app*_sample_control_pc_patterns50.txt  $f_type; 
-			#perl -w perl/gen_all_simics_files.pl $app $file $LOG_PATH/$app*_modes.txt $LOG_PATH/$app*-heap-classes.output  $LOG_PATH/$app*-stack-classes.output $LOG_PATH\_new/$app*sample_control_pc_patterns_20_500.txt $f_type; 
-			#perl -w perl/gen_all_simics_files.pl $app $file $LOG_PATH/$app*_modes.txt $LOG_PATH/$app*-heap-classes.output  $LOG_PATH/$app*-stack-classes.output $LOG_PATH\_new/$app*sample_control_pc_patterns_5_500.txt $f_type; 
-			#perl -w perl/gen_all_simics_files.pl $app $file $LOG_PATH/$app*_modes.txt $LOG_PATH/$app*-heap-classes.output  $LOG_PATH/$app*-stack-classes.output $LOG_PATH/$app*sample_control_pc_patterns.txt $f_type; 
-			#perl -w perl/sort_list.pl simics_file_list/simics_file_list_$app\_*_all.txt
 		done
 	done
 done 
