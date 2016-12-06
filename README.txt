@@ -147,7 +147,7 @@ Relevant instructions can be found at http://research.cs.wisc.edu/gems/GEMS-Ubun
 Once you have a base checkpoint, edit the top of $APPROXILYZER/scripts/dynamic_relyzer/simpoint.py with the base checkpoint path. Then follow the steps below:
 
 1) Place both ISOs in the $APPROXILYZER/workloads/iso/ directory.
-2) Copy the content of the golden ISO and place it in $RELYZER/workloads/golden_output/ 
+2) Copy the content of the golden ISO and place it in $APPROXILYZER/workloads/golden_output/ 
 directory.
 3) Make a checkpoint for the whole iso:
     $ ./approxilyzer.sh -I [iso_name]
@@ -189,7 +189,7 @@ Follow the instructions in the prompt.
 10) You are now done! The fault list should be located inside $APPROXILYZER/fault_list_output/
 
 
-RUNNING RELYZER FAULT INJECTIONS:
+RUNNING APPROXILYZER FAULT INJECTIONS:
 1) Prepare fault injection directories:
     $ ./approxilyzer -i prep -a [app_name]
 2) A list of fault injections will be available in $APPROXILYZER/results/simics_file_list. Run one injection experiment per line. These can be done in 
@@ -202,5 +202,24 @@ Alternatively, you can use a parallel script which calls run_injection_jobs usin
     $ ./approxilyzer -i results -a [app_name]
 4) Results should now be at $APPROXILYZER/results/injection_results/
 
+
+RUNNING APPROXILYZER FAULT INJECTIONS:
+1) Since approximate computing is a domain specific domain, you will need
+    to provide the metric you desire for your application. Please check out 
+    the Approxilyzer paper for more information:
+    http://rsim.cs.uiuc.edu/Pubs/16-MICRO-approxilyzer.pdf
+2) Since approximation is app-specific, the metric code needs 
+    to reside inside the following directory. When you write your own metric
+    make sure to make it reside here:
+    $APPROXILYZER/workloads/apps/[app_name]
+3) Given our running example, we provide a sample metric. To finish this 
+    tutorial, copy the blackscholes metric information into your apps 
+    directory:
+    $ cp $APPROXILYZER/scripts/approx_computing/gen_sdc_quality_blackscholes_simlarge.pl $APPROXILYZER/workloads/apps/blackscholes_simlarge/ 
+4) With the application metric ready, you can run the final command in Approxilyzer:
+    $./approxilyzer -A analysis -a [app_name]
+5) That's all! The output will reside in $APPROXILYZER/results/injection_results/parsed_results/
+There should be two files: [app_name]_pc_summary_approx.txt, and [app_name]_pc_summary_resiliency.txt.
+For more details, please look at the MICRO 16 Approxilyzer paper.
 
 

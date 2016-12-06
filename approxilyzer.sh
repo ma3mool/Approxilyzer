@@ -58,7 +58,7 @@ print_usage () {
     echo -e "\t-r [prof || anlys || fault_gen || int_ckpt]      Relyzer analysis"
     echo -e "\t-i [prep || results]                             Fault Injection"
     echo -e "\t-v [prep || results]                             Validation"
-    echo -e "\t-A [approx 1 || approx 2]                        Approxilyzer analysis"
+    echo -e "\t-A [analysis]                                    Approxilyzer analysis"
     echo -e "\t-a app_name                                      Application"
     echo -e "\t-h                                               Usage"
     exit 1
@@ -201,8 +201,15 @@ then
 # run Approxilyzer script
 elif  ! $sflag && ! $Iflag && ! $cflag && ! $rflag && ! $iflag && ! $vflag && $Aflag && $aflag
 then
-    echo "Running Approxilyzer script for $app_name with $AValue"
-    exit 0
+    if [ "$AValue" == "analysis" ]
+    then
+        echo "Running Approxilyzer $AValue script for $app_name "
+        $APPROXILYZER/scripts/primary_scripts/approxilyzer.sh $app_name
+        exit 0
+    else
+        exit 1
+    fi
+    
 else
     echo "Incorrect combination of options."
     print_usage

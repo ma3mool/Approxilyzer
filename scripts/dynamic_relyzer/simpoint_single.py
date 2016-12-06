@@ -7,7 +7,7 @@ OPT_LEVEL = "fully_optimized"
 APP_DETECTORS = 0
 ARCH_INJ = 1 # ARCH_INJ injects fault directly in simics, without using opal
 MICROARCH_INJECTIONS = 0 # injects faults in microarch units
-ISO_OUTPUT="coverage_2" # Output ISO name, used for golden output comparison
+ISO_OUTPUT="coverage_3" # Output ISO name, used for golden output comparison
 BASE_CHECKPOINT = "/home/venktgr2/checkpts/opensolaris_intel_chkpt/optimized_apps/fully_optimized/apps_copied" # Base checkpoint, used to make subsequent chkpts
 
 if OPT_LEVEL == "fully_optimized" :
@@ -1401,14 +1401,17 @@ def run_complete_new(app, phase, seqnum, pc, core=-1,  type=-1, bit=-1, stuck=-1
   #run('new-file-cdrom /home/sadve/shari2/outputs/fully_optimized_output.iso')
 #  run('new-file-cdrom /shared/workspace/approx_comp/workloads/iso/fully_optimized_output.iso')
 #  run('new-file-cdrom /shared/workspace/approx_comp/workloads/iso/apps_output.iso')
-  run('new-file-cdrom /shared/workspace/approx_comp/workloads/iso/%s'%(ISO_OUTPUT))
+  ISO_PATH = WORKLOADS_PATH + "/iso/" + ISO_OUTPUT
+  print ISO_PATH
+  #run('new-file-cdrom /shared/workspace/approx_comp/workloads/iso/%s' %(ISO_OUTPUT))
+  run('new-file-cdrom %s.iso ' %(ISO_PATH))
 #  run('new-file-cdrom /shared/workspace/approx_comp/workloads/iso/blackscholes_input_outcomes.iso')
   run_inside_safe(' umount /mnt/cdrom ;magic_brk\n', filename)
   run('cd25B_2_6.eject ')
 #  run('cd25B_2_6.insert blackscholes_input_outcomes')
 #  run('cd25B_2_6.insert fully_optimized_output')
 #  run('cd25B_2_6.insert apps_output')
-  run('cd25B_2_6.insert %s'%(ISO_OUTPUT))
+  run('cd25B_2_6.insert %s' %(ISO_OUTPUT))
   run_inside_safe(' mount -F hsfs /dev/dsk/c0t6d0s0 /mnt/cdrom ;magic_brk\n', filename)
   run_inside_safe(' diff -c /mnt/cdrom/%s.output output.txt > test_out.txt; grep "No differences encounter" test_out.txt; magic_brk\n' %(app), filename)
   check_app_error(capture_log, filename, "")
