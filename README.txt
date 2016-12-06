@@ -219,7 +219,7 @@ RUNNING APPROXILYZER FAULT INJECTIONS:
 4) With the application metric ready, you can run the final command in Approxilyzer:
     $./approxilyzer -A analysis -a [app_name]
 5) That's all! The output will reside in $APPROXILYZER/results/injection_results/parsed_results/
-There should be two files: [app_name]_pc_summary_approx.txt, and [app_name]_pc_summary_resiliency.txt.
-For more details, please look at the MICRO 16 Approxilyzer paper.
+    There should be two files: [app_name]_pc_summary_approx.txt, and [app_name]_pc_summary_resiliency.txt.
+    For more details, please look at the MICRO 16 Approxilyzer paper.
 
 
