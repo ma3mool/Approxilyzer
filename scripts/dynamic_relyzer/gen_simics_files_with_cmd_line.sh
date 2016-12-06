@@ -167,4 +167,3 @@ do
 
 done
 echo "Done. Finished running script with parameters $1 $2 $3 $4 $5 $6 $7 $8 $9 ${10}."
-/shared/workspace/amahmou2/scripts/send_email.sh "Simic Files for $1 $2 $3 $4 $5 $6 $7 $8 $9 ${10}"

@@ -39,7 +39,7 @@ bool program_t::populate_instructions(string prg_name, string a_name) {
 	string file_name = "apps/unopt/" + prg_name + "/" + app_name + ".clean.dis";
 #else
 //	string file_name = "apps/optimized/full_optimized/" + prg_name + "/" + app_name + ".clean.dis";
-	string file_name = string(std::getenv("RELYZER_APPS"))  + "/" + prg_name + "/" + app_name + ".clean.dis";
+	string file_name = string(std::getenv("APPROXILYZER"))  + "/workloads/apps/" + prg_name + "/" + app_name + ".clean.dis";
 #endif
 	if(DEBUG_PARSER)
 		cout << "file_name = -" << file_name << "-\n";

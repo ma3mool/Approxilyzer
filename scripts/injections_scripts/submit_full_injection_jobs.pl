@@ -139,4 +139,3 @@ while ($go_to_sleep == 1) {
 
 close(JOB_LIST);
 
-system "/shared/workspace/amahmou2/scripts/send_email.sh all_injections_in"

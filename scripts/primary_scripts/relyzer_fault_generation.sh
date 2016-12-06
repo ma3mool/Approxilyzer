@@ -25,12 +25,7 @@ else
     exit 1
 fi
 
-if [ -d $RELYZER_APPS ]; then
-    echo "RELYZER_APPS directory exists"
-else
-    echo "No RELYZER_APPS directory. Add it to your .bashrc"
-    exit 1
-fi
+RELYZER_APPS=$APPROXILYZER/workloads/apps
 
 set -e
 

@@ -9,15 +9,14 @@ Approxilyzer employs static and dynamic analysis, in addition to heuristics, to 
 the run-time of finding Approximate instructions and SDC-causing instructions by 3-6x 
 orders of magnitude.
 
-Project overview can be viewed at: rsim.cs.illinois.edu/approxilyzer
+Project overview can be viewed at: https://cs.illinois.edu/approxilyzer
 
 
 
 APPROXILYZER REQUIREMENTS
 =========================================================
 1) WindRiver SIMICS 3.0.31 (requires WindRiver license)
-2) Wisconsin Multifacet GEMS
-3) A SPARC V9 machine, running OpenSolaris 
+2) A SPARC V9 machine, running OpenSolaris (cross-compiler support coming soon)
 
 
 
@@ -132,7 +131,8 @@ You can test the mount locally with:
 
 
 We provide a template application ISO and golden ISO with the distribution loading 
-some PARSEC and SPLASH-2 benchmarks. 
+some PARSEC and SPLASH-2 benchmarks. Refer to PARSEC and SPLASH-2 for
+further licensing and distribution of these ISOs.
 Apps ISO: rsim.cs.illinois.edu/approxilyzer/apps.iso
 Apps Output ISO: rsim.cs.illinois.edu/approxilyzer/apps_output.iso
  
@@ -146,7 +146,7 @@ Relevant instructions can be found at http://research.cs.wisc.edu/gems/GEMS-Ubun
 
 Once you have a base checkpoint, edit the top of $APPROXILYZER/scripts/dynamic_relyzer/simpoint.py with the base checkpoint path. Then follow the steps below:
 
-1) Place both ISOs in the $RELYZER_SHARED/workloads/iso/ directory.
+1) Place both ISOs in the $APPROXILYZER/workloads/iso/ directory.
 2) Copy the content of the golden ISO and place it in $RELYZER/workloads/golden_output/ 
 directory.
 3) Make a checkpoint for the whole iso:
@@ -157,7 +157,7 @@ directory.
 
 
 GENERATING A FAULT LIST:
-1) Make a new directory for the application inside $RELYZER_SHARED/workloads/apps/
+1) Make a new directory for the application inside $APPROXILYZER/workloads/apps/
 The naming convention should be [app_name]_[run_script_name] for the directory.
 2) Inside this new directory, place the binary and disassembly file. 
     The binary and dis file should both have the same name (and case) as the directory.
@@ -186,13 +186,13 @@ Follow the instructions in the prompt.
     $ ./approxilyzer.sh -r fault_gen -a [app_name]
 9) Generate intermediate SIMICS checkpoints for improved performance during injection:
     $ ./approxilyzer.sh -r int_ckpt -a [app_name]
-10) You are now done! The fault list should be located inside $RELYZER_SHARED/fault_list_output/
+10) You are now done! The fault list should be located inside $APPROXILYZER/fault_list_output/
 
 
 RUNNING RELYZER FAULT INJECTIONS:
 1) Prepare fault injection directories:
     $ ./approxilyzer -i prep -a [app_name]
-2) A list of fault injections will be available in $RELYZER_SHARED/results/simics_file_list. Run one injection experiment per line. These can be done in 
+2) A list of fault injections will be available in $APPROXILYZER/results/simics_file_list. Run one injection experiment per line. These can be done in 
 parallel.
     $ cd scripts/injections_scripts/
     $ ./run_injection_jobs.pl [injection]
@@ -200,9 +200,7 @@ Alternatively, you can use a parallel script which calls run_injection_jobs usin
     $ ./submit_full_injection_jobs.pl // our sample script. Tune to your own needs
 3) Once injections are done (this may take some time), collect the results and analyze:
     $ ./approxilyzer -i results -a [app_name]
-4) Results should now be at $RELYZER_SHARED/results/injection_results/
+4) Results should now be at $APPROXILYZER/results/injection_results/
 
-
-RUNNING APPROXILYZER ANALYSIS:
 
 

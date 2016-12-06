@@ -39,7 +39,7 @@ vflag=false
 Aflag=false
 aflag=false
 
-
+startName=""
 isoName=""
 run_script_name=""
 rValue=""
@@ -78,7 +78,7 @@ else
             exit 1
         fi
         case "$opt" in
-            "-s"    )   sflag=true; shift ;;
+            "-s"    )   sflag=true; startName=$current_arg; shift ;;
             "-I"    )   Iflag=true; isoName=$current_arg; shift ;;
             "-c"    )   cflag=true; run_script_name=$current_arg; shift ;;
             "-r"    )   rflag=true; rValue=$current_arg; shift ;;
@@ -93,28 +93,38 @@ else
 fi
 
 # start script
-if  $sflag && !$Iflag && !$cflag && !$rflag && !$iflag && !$vflag && !$Aflag && !$aflag
+if  $sflag && ! $Iflag && ! $cflag && ! $rflag && ! $iflag && ! $vflag && ! $Aflag && ! $aflag
 then
-# ensure directory structure is correct. create it otherwise
-    echo "Preparing Approxilyzer!"
-    $APPROXILYZER/scripts/start_scripts/dir_setup.sh
+    if [ "$startName" == "prep" ]
+    then
+        # License accept
+        cat $APPROXILYZER/LICENSE.txt
+        read -rsp $'Press any key to accept the license agreement and continue...\n' -n1 key 
    
-    # install emerald
-    $APPROXILYZER/scripts/start_scripts/emerald_init.sh
-    $GEMS_PATH/emerald/makesymlinks_emerald.sh
-    EMERALD=$GEMS_PATH/emerald/
-    cd $EMERALD
-    make clean
-    make module DESTINATION=dynamic_relyzer PHASE=1
-    cd $GEMS_PATH/simics
-    make emerald
+        # ensure directory structure is correct. create it otherwise
+        echo
+        echo "Preparing Approxilyzer!"
+        $APPROXILYZER/scripts/start_scripts/dir_setup.sh
+   
+        # install emerald
+        $APPROXILYZER/scripts/start_scripts/emerald_init.sh
+        $GEMS_PATH/emerald/makesymlinks_emerald.sh
+        EMERALD=$GEMS_PATH/emerald/
+        cd $EMERALD
+        make clean
+        make module DESTINATION=dynamic_relyzer PHASE=1
+        cd $GEMS_PATH/simics
+        make emerald
 
-    # local symlink of simpoint.py
-    ln -s $APPROXILYZER/scripts/dynamic_relyzer/simpoint.py $GEMS_PATH/simics/home/dynamic_relyzer/simpoint.py
+        # local symlink of simpoint.py
+        ln -s $APPROXILYZER/scripts/dynamic_relyzer/simpoint.py $GEMS_PATH/simics/home/dynamic_relyzer/simpoint.py
 
-    exit 0
+        exit 0
+    else
+        exit 1
+    fi
 
-# make a new iso
+ # make a new iso
 elif  ! $sflag && $Iflag && ! $cflag && ! $rflag && ! $iflag && ! $vflag && ! $Aflag && ! $aflag
 then
     echo "Making new ISO checkpoint for $isoName"
@@ -199,8 +209,4 @@ else
     exit 1
 fi
 
-
-
-INJECTION_SCRIPTS=$APPROXILYZER/scripts/injections_scripts
-INJECTION_RESULTS=$APPROXILYZER/fault_list_output/injection_results
 

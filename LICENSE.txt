@@ -7,11 +7,11 @@ All rights reserved.
 
 
 
-Developed by:       Professor Sarita Adve's Research Group
+Released by:        Professor Sarita Adve's Research Group
 
                     University of Illinois at Urbana-Champaign
 
-                    http://rsim.cs.illinois.edu/approxilyzer
+                    http://cs.illinois.edu/approxilyzer
 
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
