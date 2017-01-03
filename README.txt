@@ -152,7 +152,7 @@ directory.
 3) Make a checkpoint for the whole iso:
     $ ./approxilyzer.sh -I [iso_name]
 4) Make a checkpoint for each application you want to run Approxilyzer on:
-    $ ./approxilyzer.sh -a [app_name] -c [associated run_script_name]
+    $ ./approxilyzer.sh -I [iso_name] -a [app_name] -c [associated run_script_name]
 5) Edit simpoint.py with the ISO_OUTPUT name. If you are using our example, that is "apps_output".
 
 
@@ -191,7 +191,7 @@ Follow the instructions in the prompt.
 
 RUNNING APPROXILYZER FAULT INJECTIONS:
 1) Prepare fault injection directories:
-    $ ./approxilyzer -i prep -a [app_name]
+    $ ./approxilyzer.sh -i prep -a [app_name]
 2) A list of fault injections will be available in $APPROXILYZER/results/simics_file_list. Run one injection experiment per line. These can be done in 
 parallel.
     $ cd scripts/injections_scripts/
@@ -199,7 +199,7 @@ parallel.
 Alternatively, you can use a parallel script which calls run_injection_jobs using condor
     $ ./submit_full_injection_jobs.pl // our sample script. Tune to your own needs
 3) Once injections are done (this may take some time), collect the results and analyze:
-    $ ./approxilyzer -i results -a [app_name]
+    $ ./approxilyzer.sh -i results -a [app_name]
 4) Results should now be at $APPROXILYZER/results/injection_results/
 
 
@@ -217,7 +217,7 @@ RUNNING APPROXILYZER FAULT INJECTIONS:
     directory:
     $ cp $APPROXILYZER/scripts/approx_computing/gen_sdc_quality_blackscholes_simlarge.pl $APPROXILYZER/workloads/apps/blackscholes_simlarge/ 
 4) With the application metric ready, you can run the final command in Approxilyzer:
-    $./approxilyzer -A analysis -a [app_name]
+    $./approxilyzer.sh -A analysis -a [app_name]
 5) That's all! The output will reside in $APPROXILYZER/results/injection_results/parsed_results/
     There should be two files: [app_name]_pc_summary_approx.txt, and [app_name]_pc_summary_resiliency.txt.
     For more details, please look at the MICRO 16 Approxilyzer paper.
