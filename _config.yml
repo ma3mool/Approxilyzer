@@ -1,0 +1,8 @@
+title: Approxilyzer
+description: A Systematic Framework for Instruction-Level Approximate Computing and its Application to Hardware Resiliency
+google_analytics: 
+show_downloads: true
+theme: jekyll-theme-cayman
+
+gems:
+  - jekyll-mentions
