@@ -7,7 +7,7 @@ OPT_LEVEL = "fully_optimized"
 APP_DETECTORS = 0
 ARCH_INJ = 1 # ARCH_INJ injects fault directly in simics, without using opal
 MICROARCH_INJECTIONS = 0 # injects faults in microarch units
-ISO_OUTPUT="coverage_3" # Output ISO name, used for golden output comparison
+ISO_OUTPUT="fully_optimized_output" # Output ISO name, used for golden output comparison
 BASE_CHECKPOINT = "/home/venktgr2/checkpts/opensolaris_intel_chkpt/optimized_apps/fully_optimized/apps_copied" # Base checkpoint, used to make subsequent chkpts
 
 if OPT_LEVEL == "fully_optimized" :
