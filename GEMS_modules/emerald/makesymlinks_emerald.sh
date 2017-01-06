@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Making symlink for emerald module"
-cd $GEMS/simics/modules
+cd $GEMS_PATH/simics/modules
 rm -rf emerald 
 mkdir emerald 
 cd emerald 
