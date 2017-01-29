@@ -20,7 +20,7 @@ To install and run Approxilyzer, download the code from github, and follow the i
 ### Authors and Contributors
 Approxilyzer builds upon Relyzer as an underlying tool that systematically analyzes and performs selective fault injections for transient faults.
 
-The primary contributors to these projects are [Prof. Sarita V Adve](http://rsim.cs.illinois.edu/~sadve/) (UIUC), [Siva Kumar Sastry Hari](https://research.nvidia.com/users/siva-hari) (UIUC, now at NVIDIA Research), [Abdulrahman Mahmoud](http://web.engr.illinois.edu/~amahmou2/) (UIUC), Helia Naeimi (Intel), Pradeep Ramachandran (UIUC, now at Multicoreware), and Radha Venkatagiri (UIUC). 
+The primary contributors to these projects are [Prof. Sarita V Adve](http://rsim.cs.illinois.edu/~sadve/) (UIUC), Khalique Ahmed (UIUC), [Siva Kumar Sastry Hari](https://research.nvidia.com/users/siva-hari) (UIUC, now at NVIDIA Research), [Abdulrahman Mahmoud](http://web.engr.illinois.edu/~amahmou2/) (UIUC), Helia Naeimi (Intel), Pradeep Ramachandran (UIUC, now at Multicoreware), and Radha Venkatagiri (UIUC). 
 
 ### Funding Sources
 The development of Approxilyzer and Relyzer is funded in part by the National Science Foundation
