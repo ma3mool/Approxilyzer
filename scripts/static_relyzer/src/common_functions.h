@@ -30,6 +30,8 @@ std::string get_random_color() {
 int get_stack_limit(std::string program_name) {
 	if(program_name.compare("prime") == 0) 
 		return 8;
+    else if (program_name.find("blackscholes") != std::string::npos)
+        return STACK_BLACKSCHOLES_SIMLARGE;
 	else if(program_name.compare("blackscholes_simlarge") == 0) 
 		return STACK_BLACKSCHOLES_SIMLARGE;
 	else if(program_name.compare("blackscholes_input_run_00000") == 0) 
@@ -44,6 +46,8 @@ int get_stack_limit(std::string program_name) {
 		return STACK_BLACKSCHOLES_INPUT_RUN_00004;
 	else if(program_name.compare("blackscholes_run_full") == 0) 
 		return STACK_BLACKSCHOLES_RUN_FULL;
+	else if(program_name.compare("blackscholes_run_32") == 0) 
+		return STACK_BLACKSCHOLES_RUN_32;
 	else if(program_name.compare("blackscholes_run_00000") == 0) 
 		return STACK_BLACKSCHOLES_RUN_FULL;
 	else if(program_name.compare("blackscholes_run_00001") == 0) 
@@ -54,9 +58,11 @@ int get_stack_limit(std::string program_name) {
 		return STACK_BLACKSCHOLES_RUN_FULL;
 	else if(program_name.compare("blackscholes_run_00004") == 0) 
 		return STACK_BLACKSCHOLES_RUN_FULL;
+	else if(program_name.compare("blackscholes_run_21") == 0) 
+		return STACK_BLACKSCHOLES_RUN_FULL;
 	else if(program_name.compare("blackscholes_run_21_a") == 0) 
 		return STACK_BLACKSCHOLES_RUN_FULL;
-	else if(program_name.compare("blackscholes_run_21_c") == 0) 
+	else if(program_name.compare("blackscholes_run_21_b") == 0) 
 		return STACK_BLACKSCHOLES_RUN_FULL;
 	else if(program_name.compare("blackscholes_run_5") == 0) 
 		return STACK_BLACKSCHOLES_RUN_FULL;
@@ -68,13 +74,33 @@ int get_stack_limit(std::string program_name) {
 		return STACK_BLACKSCHOLES_RUN_FULL;
 	else if(program_name.compare("fluidanimate") == 0) 
 		return STACK_FLUIDANIMATE;
+	else if(program_name.compare("sobel_run_ref") == 0) 
+		return STACK_SOBEL;
+	else if(program_name.compare("sobel_run_min") == 0) 
+		return STACK_SOBEL;
+	else if(program_name.compare("streamcluster_run_new_min") == 0) 
+		return STACK_STREAMCLUSTER;
+	else if(program_name.compare("streamcluster_run_new_ref") == 0) 
+		return STACK_STREAMCLUSTER;
 	else if(program_name.compare("streamcluster") == 0) 
 		return STACK_STREAMCLUSTER;
 	else if(program_name.compare("swaptions_simsmall") == 0) 
 		return STACK_SWAPTIONS_SIMSMALL;
 	else if(program_name.compare("swaptions_run_input") == 0) 
 		return STACK_SWAPTIONS_SIMSMALL;
+	else if(program_name.compare("swaptions_run_new_min") == 0) 
+		return STACK_SWAPTIONS_SIMSMALL;
+	else if(program_name.compare("swaptions_run_new_ref") == 0) 
+		return STACK_SWAPTIONS_SIMSMALL;
+	else if(program_name.compare("swaptions_run_3_1_min") == 0) 
+		return STACK_SWAPTIONS_SIMSMALL;
+	else if(program_name.compare("swaptions_run_3_1_ref") == 0) 
+		return STACK_SWAPTIONS_SIMSMALL;
+    else if (program_name.find("swaptions") != std::string::npos)
+        return STACK_SWAPTIONS_SIMSMALL;
 	else if(program_name.compare("fft_small") == 0) 
+		return STACK_FFT_SMALL;
+	else if(program_name.compare("fft_run_min") == 0) 
 		return STACK_FFT_SMALL;
 	else if(program_name.compare("fft_run_0") == 0) 
 		return STACK_FFT_SMALL;
@@ -103,6 +129,8 @@ int get_stack_limit(std::string program_name) {
 	else if(program_name.compare("water_run_full") == 0) 
 		return STACK_WATER_SMALL;
 	else if(program_name.compare("water_run_min") == 0) 
+		return STACK_WATER_SMALL;
+	else if(program_name.compare("water_run_min0") == 0) 
 		return STACK_WATER_SMALL;
 	else if(program_name.compare("water_run_input_0") == 0) 
 		return STACK_WATER_SMALL;
@@ -151,9 +179,13 @@ int get_heap_limit(std::string program_name) {
         return HEAP_BLACKSCHOLES_RUN_FULL;
 	else if(program_name.compare("blackscholes_run_full") == 0) 
         return HEAP_BLACKSCHOLES_RUN_FULL;
+	else if(program_name.compare("blackscholes_run_32") == 0) 
+        return HEAP_BLACKSCHOLES_RUN_32;
+	else if(program_name.compare("blackscholes_run_21") == 0) 
+        return HEAP_BLACKSCHOLES_RUN_FULL;
 	else if(program_name.compare("blackscholes_run_21_a") == 0) 
         return HEAP_BLACKSCHOLES_RUN_FULL;
-	else if(program_name.compare("blackscholes_run_21_c") == 0) 
+	else if(program_name.compare("blackscholes_run_21_b") == 0) 
         return HEAP_BLACKSCHOLES_RUN_FULL;
 	else if(program_name.compare("blackscholes_run_5") == 0) 
         return HEAP_BLACKSCHOLES_RUN_FULL;
@@ -165,13 +197,33 @@ int get_heap_limit(std::string program_name) {
         return HEAP_BLACKSCHOLES_RUN_FULL;
 	else if(program_name.compare("fluidanimate") == 0) 
 		return HEAP_FLUIDANIMATE;
+	else if(program_name.compare("sobel_run_ref") == 0) 
+		return HEAP_SOBEL;
+	else if(program_name.compare("sobel_run_min") == 0) 
+		return HEAP_SOBEL;
+	else if(program_name.compare("streamcluster_run_new_ref") == 0) 
+		return HEAP_STREAMCLUSTER;
+	else if(program_name.compare("streamcluster_run_new_min") == 0) 
+		return HEAP_STREAMCLUSTER;
 	else if(program_name.compare("streamcluster") == 0) 
 		return HEAP_STREAMCLUSTER;
 	else if(program_name.compare("swaptions_simsmall") == 0) 
 		return HEAP_SWAPTIONS_SIMSMALL;
+	else if(program_name.compare("swaptions_run_new_min") == 0) 
+		return HEAP_SWAPTIONS_SIMSMALL;
+	else if(program_name.compare("swaptions_run_new_ref") == 0) 
+		return HEAP_SWAPTIONS_SIMSMALL;
 	else if(program_name.compare("swaptions_run_input") == 0) 
 		return HEAP_SWAPTIONS_SIMSMALL;
+	else if(program_name.compare("swaptions_run_3_1_min") == 0) 
+		return HEAP_SWAPTIONS_SIMSMALL;
+	else if(program_name.compare("swaptions_run_3_1_ref") == 0) 
+		return HEAP_SWAPTIONS_SIMSMALL;
+    else if (program_name.find("swaptions") != std::string::npos)
+        return HEAP_SWAPTIONS_SIMSMALL;
 	else if(program_name.compare("fft_small") == 0) 
+		return HEAP_FFT_SMALL;
+	else if(program_name.compare("fft_run_min") == 0) 
 		return HEAP_FFT_SMALL;
 	else if(program_name.compare("fft_run_0") == 0) 
 		return HEAP_FFT_SMALL;
@@ -200,6 +252,8 @@ int get_heap_limit(std::string program_name) {
 	else if(program_name.compare("water_run_min") == 0) 
 		return HEAP_WATER_SMALL;
 	else if(program_name.compare("water_run_full") == 0) 
+		return HEAP_WATER_SMALL;
+	else if(program_name.compare("water_run_min0") == 0) 
 		return HEAP_WATER_SMALL;
 	else if(program_name.compare("water_run_input_0") == 0) 
 		return HEAP_WATER_SMALL;
