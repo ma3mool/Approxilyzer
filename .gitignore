@@ -1,0 +1,13 @@
+*.svn*
+*.swp
+*.swo
+*.o
+workloads/*
+simics
+fault_list_output
+GEMS_modules
+table.txt
+pilot_pop_map_common.txt
+distr.txt
+need_cats.txt
+debugging.txt
