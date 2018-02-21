@@ -12,18 +12,24 @@ $RESULTS_OUTPUT_DIR = "$FAULT_LIST_DIR/injection_results/parsed_results/";
 $prune_type = "all";
 
 my $numArgs = $#ARGV + 1;
-if($numArgs != 1) {
-	print "Usage: perl parsing_output.pl <at least one app name> \n"; 
+if($numArgs < 1 || $numArgs > 3) {
+	print "Usage: perl parsing_output.pl [app_name] (depth) \n"; 
 	die;
 }
 #my $app_name=$ARGV[$0];
 #my $INJECTION_TYPE=$ARGV[1];
 my $i = 0;
 my @apps = ();
-for ($i=0; $i<$numArgs ; $i++) {
-	push(@apps, $ARGV[$i]);
-	print "$ARGV[$i]\n";
+
+push(@apps, $ARGV[0]);
+my $depth = 50;
+if ($numArgs == 3) {
+    $depth = $ARGV[1];
 }
+#for ($i=0; $i<$numArgs ; $i++) {
+#	push(@apps, $ARGV[$i]);
+#	print "$ARGV[$i]\n";
+#}
 #print @apps;
 #print "app name is $app_name\n";
 
@@ -230,8 +236,7 @@ sub populate_pilot_population_map ($) {
 		}
 	}
 	close(CLASSES_FILE);
-
-    open(CLASSES_FILE, "<$MAIN_LOGS_DIR/$curr_app\_sample_control_pc_patterns_50_5000.txt") or die "Can't open file: $!";
+    open(CLASSES_FILE, "<$MAIN_LOGS_DIR/$curr_app\_sample_control_pc_patterns_$depth\_5000.txt") or die "Can't open file: $!";
     #open(CLASSES_FILE, "<$MAIN_LOGS_DIR/$curr_app\_sample_control_pc_patterns50.txt") or die "Can't open file: $!";
 	#open(CLASSES_FILE, "<$MAIN_LOGS_DIR\_new/$curr_app\_sample_control_pc_patterns_10_500.txt") or die "Can't open file: $!";
 	#open(CLASSES_FILE, "<$MAIN_LOGS_DIR/$curr_app\_sample_control_pc_patterns.txt") or die "Can't open file: $!";

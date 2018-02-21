@@ -32,8 +32,8 @@ script_content()
 }
 
 
-if [ $# -ne 10 ]; then
-    echo "Usage: ./gen_simics_files_with_cmd_line.sh [app_profile] [br_profile] [count_static_inst] [mode_info] [find_app_length] [heap] [stack] [control_patterns] [checkpoints] [app name]."
+if [ $# -gt 11 ] || [ $# -lt 10 ]; then
+    echo "Usage: ./gen_simics_files_with_cmd_line.sh [app_profile] [br_profile] [count_static_inst] [mode_info] [find_app_length] [heap] [stack] [control_patterns] [checkpoints] [app name] (depth)."
     echo "Sample use: ./gen_simics_files_with_cmd_line.sh 1 1 1 1 1 0 0 0 0 blackscholes"
     echo
     echo "Warning: You should still look into the script to insure correct paths"
@@ -75,8 +75,10 @@ RUN_STACK_ANALYZE=$7        # set to 0 or 1
 RUN_CONTROL_PATTERNS=$8     # set to 0 or 1 
 RUN_MAKE_CHKPTS=$9          # set to 0 or 1 
 DEPTH=50                    # Control Pattern Depth
-
-
+if [ $# -eq 11 ]; then
+    DEPTH=${11}
+fi
+echo "Depth=:$DEPTH"
 
 cd $DIR
 appSuffix=""
@@ -167,3 +169,4 @@ do
 
 done
 echo "Done. Finished running script with parameters $1 $2 $3 $4 $5 $6 $7 $8 $9 ${10}."
+/shared/workspace/kahmed10/scripts/send_email.sh "Simic Files for $1 $2 $3 $4 $5 $6 $7 $8 $9 ${10}"

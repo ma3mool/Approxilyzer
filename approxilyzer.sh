@@ -38,6 +38,7 @@ iflag=false
 vflag=false
 Aflag=false
 aflag=false
+dflag=false
 
 startName=""
 isoName=""
@@ -47,6 +48,7 @@ iValue=""
 vValue=""
 Avalue=""
 app_name=""
+dValue=""
 
 
 print_usage () {
@@ -60,6 +62,7 @@ print_usage () {
     echo -e "\t-v [prep || results]                             Validation"
     echo -e "\t-A [analysis]                                    Approxilyzer analysis"
     echo -e "\t-a app_name                                      Application"
+    echo -e "\t-d depth                                         Depth"
     echo -e "\t-h                                               Usage"
     exit 1
 }
@@ -86,6 +89,7 @@ else
             "-v"    )   vflag=true; vValue=$current_arg; shift ;;
             "-A"    )   Aflag=true; AValue=$current_arg; shift ;;
             "-a"    )   aflag=true; app_name=$current_arg; shift ;;
+            "-d"    )   dflag=true; dValue=$current_arg; shift ;;
             *       )   echo "ERROR: Invalid option: \""$opt"\"" >&2
                         exit 1;;
         esac
@@ -144,13 +148,25 @@ then
     echo "Running relyzer script for $app_name with $rValue"
     if [ "$rValue" == "prof" ]
     then
-        $APPROXILYZER/scripts/primary_scripts/relyzer_fault_generation.sh $app_name 1
+        if $dflag; then
+            $APPROXILYZER/scripts/primary_scripts/relyzer_fault_generation.sh $app_name 1 $dValue
+        else    
+            $APPROXILYZER/scripts/primary_scripts/relyzer_fault_generation.sh $app_name 1
+        fi
     elif [ "$rValue" == "anlys" ]
     then
-        $APPROXILYZER/scripts/primary_scripts/relyzer_fault_generation.sh $app_name 2
+        if $dflag; then
+            $APPROXILYZER/scripts/primary_scripts/relyzer_fault_generation.sh $app_name 2 $dValue
+        else
+            $APPROXILYZER/scripts/primary_scripts/relyzer_fault_generation.sh $app_name 2 
+        fi
     elif [ "$rValue" == "fault_gen" ]
     then
-        $APPROXILYZER/scripts/primary_scripts/relyzer_fault_generation.sh $app_name 3
+        if $dflag; then
+            $APPROXILYZER/scripts/primary_scripts/relyzer_fault_generation.sh $app_name 3 $dValue
+        else
+            $APPROXILYZER/scripts/primary_scripts/relyzer_fault_generation.sh $app_name 3
+        fi
     elif [ "$rValue" == "int_ckpt" ]
     then
         $APPROXILYZER/scripts/primary_scripts/relyzer_fault_generation.sh $app_name 4
@@ -171,7 +187,11 @@ then
     elif [ "$iValue" == "results" ]
     then
         $APPROXILYZER/scripts/primary_scripts/relyzer_injections.sh $app_name 2
-        $APPROXILYZER/scripts/primary_scripts/relyzer_injections.sh $app_name 3
+        if $dflag; then
+            $APPROXILYZER/scripts/primary_scripts/relyzer_injections.sh $app_name 3 $dValue
+        else
+            $APPROXILYZER/scripts/primary_scripts/relyzer_injections.sh $app_name 3
+        fi
     else
         echo "Incorrect option passed to injections scripts"
         print_usage

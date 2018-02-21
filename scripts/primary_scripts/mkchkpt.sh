@@ -27,7 +27,7 @@ if [[ $# -eq 2 && "$1" == "iso" ]]; then
 
     # runs simics file
     cd $SIMICS_DIR
-    ./simics -stall $RUN_SCRIPT_PATH/make_iso_ckpt_${2}.simics
+    ./simics -stall -no-win $RUN_SCRIPT_PATH/make_iso_ckpt_${2}.simics
 
 ############################ MAKE AN APP RUN CHKPT ############################ 
 elif [[ $# -eq 4 && "$1" == "run" ]]; then
@@ -43,7 +43,7 @@ elif [[ $# -eq 4 && "$1" == "run" ]]; then
     $APPROXILYZER/scripts/start_scripts/make_app_chkpt.sh $2 $3 $4
 
     cd $SIMICS_DIR
-    ./simics -stall $RUN_SCRIPT_PATH/make_app_run_ckpt_${3}_${4}.simics
+    ./simics -stall -no-win $RUN_SCRIPT_PATH/make_app_run_ckpt_${3}_${4}.simics
 
    # runs simics file
 

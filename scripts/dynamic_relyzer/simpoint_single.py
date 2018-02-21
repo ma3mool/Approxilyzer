@@ -7,7 +7,25 @@ OPT_LEVEL = "fully_optimized"
 APP_DETECTORS = 0
 ARCH_INJ = 1 # ARCH_INJ injects fault directly in simics, without using opal
 MICROARCH_INJECTIONS = 0 # injects faults in microarch units
+#ISO_OUTPUT="blackscholes_sm_output" # Output ISO name, used for golden output comparison
+#ISO_OUTPUT="coverage" # Output ISO name, used for golden output comparison
 ISO_OUTPUT="fully_optimized_output" # Output ISO name, used for golden output comparison
+#ISO_OUTPUT="coverage_fft_smallest_output" # Output ISO name, used for golden output comparison
+#ISO_OUTPUT="coverage_swaptions_output" # Output ISO name, used for golden output comparison
+#ISO_OUTPUT="coverage_output" # Output ISO name, used for golden output comparison
+#ISO_OUTPUT="coverage_4_output" # Output ISO name, used for golden output comparison
+#ISO_OUTPUT="coverage_fft_output" # Output ISO name, used for golden output comparison
+#ISO_OUTPUT="coverage_lu_smallest_output" # Output ISO name, used for golden output comparison
+#ISO_OUTPUT="streamcluster_run_new_ref_output" # Output ISO name, used for golden output comparison
+#ISO_OUTPUT="jpeg_ref_output" # Output ISO name, used for golden output comparison
+#ISO_OUTPUT="jmeint_ref_output" # Output ISO name, used for golden output comparison
+#ISO_OUTPUT="inversek2j_ref_output" # Output ISO name, used for golden output comparison
+#ISO_OUTPUT="kmeans_ref_output" # Output ISO name, used for golden output comparison
+#ISO_OUTPUT="streamcluster_new_min_output" # Output ISO name, used for golden output comparison
+#ISO_OUTPUT="sobel_ref_output" # Output ISO name, used for golden output comparison
+#ISO_OUTPUT="sobel_min_output" # Output ISO name, used for golden output comparison
+#ISO_OUTPUT="streamcluster_min_output" # Output ISO name, used for golden output comparison
+ISO_OUTPUT="swaptions_new_output" # Output ISO name, used for golden output comparison
 BASE_CHECKPOINT = "/home/venktgr2/checkpts/opensolaris_intel_chkpt/optimized_apps/fully_optimized/apps_copied" # Base checkpoint, used to make subsequent chkpts
 
 if OPT_LEVEL == "fully_optimized" :
@@ -23,23 +41,23 @@ elif OPT_LEVEL == "optimized" :
 elif OPT_LEVEL == "unopt" :
   MAIN_LOG_DIR = "./unopt_main_logs/"
 #  CHECKPOINT_DIR = "/home/sadve/shari2/GEMS/simics/home/opensolaris_intel_chkpt/unopt"
-  CHECKPOINT_DIR = "/shared/workspace/amahmou2/Relyzer_GEMS/src_GEMS/simics/checkpoints/"
+  CHECKPOINT_DIR = "/shared/workspace/kahmed10/src_GEMS/simics/checkpoints/"
 # else:
 #   #CHECKPOINT_DIR = "/nfshome/sshari/research/GEMS/simics/home/checkpoints/"
 #   CHECKPOINT_DIR = "/home/sadve/shari2/GEMS/simics/home/opensolaris_intel_chkpt"
 #   MAIN_LOG_DIR = "./main_logs"
 
-CHKPT_FILE_DIR = "/scratch/amahmou2/chkpt"
+CHKPT_FILE_DIR = "/scratch/kahmed10/chkpt"
 COMPARE_CHKPT_DIR = "/mounts/sadve/tmp"
-COMPARE_GOLDEN_CHKPT_DIR = "/scratch/amahmou2/compare_golden_checkpoints"
-CRAFF_DIR = "/scratch/amahmou2/craff"
-LOCAL_OUTPUT_DIR = "/scratch/amahmou2/logs"
+COMPARE_GOLDEN_CHKPT_DIR = "/scratch/kahmed10/compare_golden_checkpoints"
+CRAFF_DIR = "/scratch/kahmed10/craff"
+LOCAL_OUTPUT_DIR = "/scratch/kahmed10/logs"
 CRAFF_BIN = "/home/shari2/GEMS/simics-3.0.31/bin/craff"
 LOG_DIR = "./logs"
 OUTPUT_DIR = "./logs"
-CONTROL_PATTERN_LEN = 5000
+CONTROL_PATTERN_LEN = 5000 # number of instructions succeeding current instruction?
 #CONTROL_PATTERN_LEN = 500
-CONTROL_DEPTH = 5
+CONTROL_DEPTH = 5 # number of branches, calls, etc
 CONTROL_PATTEN_CAP = 50
 if MICROARCH_INJECTIONS == 1:
   SIM_STEPS = 10000000
@@ -52,7 +70,7 @@ print CHECKPOINT_DIR
 #print hex(app_txt_info.actual_app_start['blackscholes_simlarge_abdul'])
 
 if os.access(CHECKPOINT_DIR,os.F_OK) == 0:
-  print '%s does not exist!'%(CHECKPOINT_DIR)
+  print "line 58: " + str('%s does not exist!'%(CHECKPOINT_DIR))
 
 def get_app_txt_info(app_name):
     app_path = WORKLOADS_PATH + "/apps/" + app_name
@@ -633,8 +651,8 @@ def run_new_all(app, phase, seqnum, pc, core=-1,  type=-1, bit=-1, stuck=-1, fau
   #if(app == "fft_opt_abdul"):
   #    start_points = [  218024393104, 218124393104, 218224393104, 218324393104, 218424393104, 218524393104, 218624393104, 218724393104, 218824393104, 218924393104, 219024393104, 219124393104, 219224393104, 219324393104, 219424393104, 219524393104, 219624393104, 219724393104, 219824393104, 219924393104, 220024393104, 220124393104, 220224393104, 220324393104, 220424393104, 220524393104, 220624393104, 220724393104, 220824393104, 220924393104, 221024393104, 221124393104, 221224393104, 221324393104, 221424393104, 221524393104, 221624393104, 221724393104, 221824393104, 221924393104, 222024393104, 222124393104, 222224393104, 222324393104, 222424393104, 222524393104, 222624393104, 222724393104, 222824393104, 222924393104, 223024393104, 223124393104, 223224393104, 223324393104, 223424393104, 223524393104
  #             ]
-  if(app == "fft_small"):
-    start_points = [ 382041434832, 382141434832, 382241434832, 382341434832, 382441434832, 382541434832, 382641434832, 382741434832, 382841434832, 382941434832, 383041434832, 383141434832, 383241434832, 383341434832, 383441434832, 383541434832, 383641434832, 383741434832, 383841434832, 383941434832, 384041434832, 384141434832, 384241434832, 384341434832, 384441434832, 384541434832, 384641434832, 384741434832, 384841434832, 384941434832, 385041434832, 385141434832, 385241434832, 385341434832, 385441434832, 385541434832, 385641434832, 385741434832, 385841434832, 385941434832, 386041434832, 386141434832 ]
+#  if(app == "fft_small"):
+#    start_points = [ 382041434832, 382141434832, 382241434832, 382341434832, 382441434832, 382541434832, 382641434832, 382741434832, 382841434832, 382941434832, 383041434832, 383141434832, 383241434832, 383341434832, 383441434832, 383541434832, 383641434832, 383741434832, 383841434832, 383941434832, 384041434832, 384141434832, 384241434832, 384341434832, 384441434832, 384541434832, 384641434832, 384741434832, 384841434832, 384941434832, 385041434832, 385141434832, 385241434832, 385341434832, 385441434832, 385541434832, 385641434832, 385741434832, 385841434832, 385941434832, 386041434832, 386141434832 ]
 #  if(app == "fluidanimate_opt_abdul"):
 #    start_points = [ 228145975993,228245975993,228345975993,228445975993,228545975993,228645975993,228745975993,228845975993,228945975993,229045975993,229145975993,229245975993,229345975993,229445975993,229545975993,229645975993,229745975993,229845975993,229945975993,230045975993,230145975993,230245975993,230345975993,230445975993,230545975993,230645975993,230745975993,230845975993,230945975993,231045975993,231145975993,231245975993,231345975993 ]
   if(app == "fluidanimate_simsmall"):
@@ -700,21 +718,30 @@ def run_new_all(app, phase, seqnum, pc, core=-1,  type=-1, bit=-1, stuck=-1, fau
 
 
   intermediate_checkpoints = WORKLOADS_PATH + "/apps/" + app + "/intermediate_checkpoints.txt"
-  start_points = open(intermediate_checkpoints).readlines(); #FIX HERE! Does it need the first number??
-
-
+  startpoints = open(intermediate_checkpoints).readlines(); #FIX HERE! Does it need the first number??
+  start_points = map(int, startpoints)
 
   if APP_DETECTORS == 1:  # start from the begining of the application
     start_points = [123253189924297]
 
+  #checkpoint_gap = 1000000
+  #checkpoint_gap = 10000000
   checkpoint_gap = 100000000
   initial_skip = 1
   print 'injection cycyle = %s' % injcycle
-  start_point = 0
-  if injcycle < start_points[0]:
+
+  if len(startpoints) == 0:
+    print "Elapsed time just before loading checkpoint: %f" % time.clock()
     run_sim_command('read-configuration %s/%s' % (CHECKPOINT_DIR,app))
+    print "Elapsed time just after loading checkpoint: %f" % time.clock()
     print 'starting simulation from the begining'
     initial_skip = 1
+  elif injcycle < start_points[0] :
+    print "Elapsed time just before loading checkpoint: %f" % time.clock()
+    run_sim_command('read-configuration %s/%s' % (CHECKPOINT_DIR,app))
+    print "Elapsed time just after loading checkpoint: %f" % time.clock()
+    print 'starting simulation from the begining'
+    initial_skip = 1 
   else:
     found_start_point = 0
     for start_point in start_points:
@@ -729,9 +756,9 @@ def run_new_all(app, phase, seqnum, pc, core=-1,  type=-1, bit=-1, stuck=-1, fau
     initial_skip = 0
     run_sim_command('read-configuration %s/intermediate/%s_%s' % (CHECKPOINT_DIR,app,start_point))
 
-  run_sim_command('instruction-fetch-mode instruction-fetch-trace')
-  run_sim_command('istc-disable')
-  run_sim_command('dstc-disable')
+#  run_sim_command('instruction-fetch-mode instruction-fetch-trace')
+#  run_sim_command('istc-disable')
+#  run_sim_command('dstc-disable')
 
   cpu_p = [ SIM_proc_no_2_ptr(i) for i in range(1) ]
   begin = dict([(p, p.steps) for p in cpu_p])
@@ -752,6 +779,7 @@ def run_new_all(app, phase, seqnum, pc, core=-1,  type=-1, bit=-1, stuck=-1, fau
   print "current cycle is: %s" % curr_cycle
   skip_cycles = injcycle - INJ_INST - curr_cycle
   print 'Skip %s instructions'%(skip_cycles)
+  print "Elapsed time just before running app: %f" % time.clock()
   run_sim_command('c %d' %(skip_cycles))
   run_name = '%s.pc%s.p%s.c%s.t%s.b%s.s%s.r%s.d%s.%s' % (app, pc, pilot, core, type, bit, stuck, faultreg, srcdest, seqnum)
 
@@ -760,7 +788,8 @@ def run_new_all(app, phase, seqnum, pc, core=-1,  type=-1, bit=-1, stuck=-1, fau
     filename = '%s/%s.pc%s.p%s.c%s.t%s.b%s.s%s.r%s.d%s.%s.completion_output' % (LOCAL_OUTPUT_DIR, app, pc, pilot, core, type, bit, stuck, faultreg, srcdest, seqnum)
     run_sim_command('c %d' %(INJ_INST))
     inject_trans_fault(pc, faultreg, bit, srcdest, type)
-    if APP_DETECTORS == 1:
+    if APP_DETECTORS == 1: 
+      print "Elapsed time just after running app (App detector): %f" % time.clock()
       app_detectors.panic_break_num = SIM_breakpoint(conf.primary_context,
                                          Sim_Break_Virtual,
                                          Sim_Access_Execute,
@@ -768,6 +797,7 @@ def run_new_all(app, phase, seqnum, pc, core=-1,  type=-1, bit=-1, stuck=-1, fau
                                          216,
                                          Sim_Breakpoint_Simulation)
     else:
+      #print "Elapsed time just after running app (Detected): %f" % time.clock()
       SIM_breakpoint(conf.primary_context,
                                        Sim_Break_Virtual,
                                        Sim_Access_Execute,
@@ -779,9 +809,12 @@ def run_new_all(app, phase, seqnum, pc, core=-1,  type=-1, bit=-1, stuck=-1, fau
     SIM_hap_add_callback("Core_Exception", core_exception, [ filename, begin ])
 
     run_sim_command('c %d' %(INJ_INST))
+    print "Elapsed time just after running app: %f" % time.clock()
     print "Fault not detected\n"
     checkpoint_file = '%s/%s.chkpt' % (CHKPT_FILE_DIR, run_name)
+    print "Elapsed time just before saving checkpoint: %f" % time.clock()
     run_sim_command('write-configuration -z "%s"' % (checkpoint_file))
+    print "Elapsed time just after saving checkpoint: %f" % time.clock()
 
     if APP_DETECTORS == 1:
       import pickle
@@ -996,7 +1029,7 @@ def exception_info (app):
   SIM_hap_add_callback("Core_Magic_Instruction", hap_mode_magic, app)
   run_sim_command('c')
   for e in exception_count:
-    print e + ":" + str(exception_count[e])
+    print  e + ":" + str(exception_count[e])
 
 exception_code = [0x02, 0x05, 0x0a,
                   0x08, 0x10, 0x28,
@@ -1165,6 +1198,7 @@ def core_problem_pc(args, cpu, access, brknum, reg, size):
     run('quit 666')
 
 def check_app_error(capture_log, filename, str):
+  print "Elapsed time just before checking app_error: %f" % time.clock()
   # check in the captured log whether there are some error messages
   infile = open('%s'%capture_log,"r")
   text = infile.read()
@@ -1179,7 +1213,8 @@ def check_app_error(capture_log, filename, str):
     FILE.close()
     os.remove('%s'%(capture_log))
     print "Masked"
-    print "Here"
+    #print "Here"
+    print "Elapsed time just after checking app_error: %f" % time.clock()
     run('quit 666')
 
   search = "Segmentation Fault"
@@ -1192,6 +1227,7 @@ def check_app_error(capture_log, filename, str):
     os.remove('%s'%(capture_log))
     print "exception: Detected Segmentation Fault "
  #   print "Fault detected : Seg Fault"
+    print "Elapsed time just after checking app_error: %f" % time.clock()
     run('quit 666')
 
   search = "Bus Error"
@@ -1204,6 +1240,7 @@ def check_app_error(capture_log, filename, str):
     os.remove('%s'%(capture_log))
     print "exception: Detected Bus Error"
  #  print "Fault detected : Bus Error"
+    print "Elapsed time just after checking app_error: %f" % time.clock()
     run('quit 666')
 
   search = "ERROR"
@@ -1216,6 +1253,7 @@ def check_app_error(capture_log, filename, str):
     os.remove('%s'%(capture_log))
     print "exception: Detected ERROR"
  #  print "Fault detected : ERROR"
+    print "Elapsed time just after checking app_error: %f" % time.clock()
     run('quit 666')
 
 
@@ -1234,7 +1272,7 @@ def exit(stop, start, cpu):
 def run_complete_new(app, phase, seqnum, pc, core=-1,  type=-1, bit=-1, stuck=-1, faultreg=64, srcdest=0, pilot=0, injcycle=0):
   core = 0
   global magic_reached
-
+  print "Elapsed time just before run_complete_new: %f" % time.clock()
   print "Running benchmark to completion\n"
   run_name = '%s.pc%s.p%s.c%s.t%s.b%s.s%s.r%s.d%s.%s' % (app, pc, pilot, core, type, bit, stuck, faultreg, srcdest, seqnum)
   start_checkpoint_name = '%s/%s.chkpt' %(CHKPT_FILE_DIR, run_name)
@@ -1292,7 +1330,7 @@ def run_complete_new(app, phase, seqnum, pc, core=-1,  type=-1, bit=-1, stuck=-1
   checkpoint3 = -1
 
   run_only_once = 0
-
+  print "Elapsed time just before running complete: %f" % time.clock()
   while(magic_reached == 0):
     run_sim_command('c 10_000_000_000') # 10 billion
     # breakpoint reached
@@ -1358,6 +1396,7 @@ def run_complete_new(app, phase, seqnum, pc, core=-1,  type=-1, bit=-1, stuck=-1
       if(magic_reached == 1):
         #print "Yes, Magic reached! "
         print ""
+	print "Elapsed time just after running complete: %f" % time.clock()
       else:
         end_cycle = SIM_cycle_count(conf.cpu0) # for timeout detection
         if(end_cycle-start_cycle >= 20000000000):
@@ -1365,6 +1404,7 @@ def run_complete_new(app, phase, seqnum, pc, core=-1,  type=-1, bit=-1, stuck=-1
           FILE.write('Detected Timeout\n')
           FILE.close()
           print "Timeout"
+	  print "Elapsed time just after running complete: %f" % time.clock()
           run('quit 666')
 
   # magic break reached
@@ -1396,29 +1436,38 @@ def run_complete_new(app, phase, seqnum, pc, core=-1,  type=-1, bit=-1, stuck=-1
   fault = '%s.pc%s.p%s.c%s.t%s.b%s.s%s.r%s.d%s.%s' % (app, pc, pilot, core, type, bit, stuck, faultreg, srcdest, seqnum)
   craff_filename = '%s/%s.diff.craff' % (CRAFF_DIR, fault)
   run_sim_command('con0.capture-start %s' % (capture_log))
-
 # REMEMBER TO MAKE THIS SCALABLE GOLDEN
   #run('new-file-cdrom /home/sadve/shari2/outputs/fully_optimized_output.iso')
 #  run('new-file-cdrom /shared/workspace/approx_comp/workloads/iso/fully_optimized_output.iso')
 #  run('new-file-cdrom /shared/workspace/approx_comp/workloads/iso/apps_output.iso')
   ISO_PATH = WORKLOADS_PATH + "/iso/" + ISO_OUTPUT
+  APP_ISO_PATH = WORKLOADS_PATH + "/iso/"
+#  print "ISO OUTPUT is %s" %ISO_OUTPUT
+#  print "ISO PATH is %s" %ISO_PATH
+  #run('new-file-cdrom /shared/workspace/approx_comp/workloads/iso/%s' %(ISO_OUTPUT))
+#  ISO_PATH = WORKLOADS_PATH + "/iso/" + ISO_OUTPUT
   print ISO_PATH
   #run('new-file-cdrom /shared/workspace/approx_comp/workloads/iso/%s' %(ISO_OUTPUT))
-  run('new-file-cdrom %s.iso ' %(ISO_PATH))
+  print "Elapsed time just before loading in golden ISO: %f" % time.clock()
+  run('new-file-cdrom %s/%s_output.iso ' %(APP_ISO_PATH,app))
 #  run('new-file-cdrom /shared/workspace/approx_comp/workloads/iso/blackscholes_input_outcomes.iso')
   run_inside_safe(' umount /mnt/cdrom ;magic_brk\n', filename)
   run('cd25B_2_6.eject ')
 #  run('cd25B_2_6.insert blackscholes_input_outcomes')
 #  run('cd25B_2_6.insert fully_optimized_output')
 #  run('cd25B_2_6.insert apps_output')
-  run('cd25B_2_6.insert %s' %(ISO_OUTPUT))
+  run('cd25B_2_6.insert %s_output' %(app))
   run_inside_safe(' mount -F hsfs /dev/dsk/c0t6d0s0 /mnt/cdrom ;magic_brk\n', filename)
-  run_inside_safe(' diff -c /mnt/cdrom/%s.output output.txt > test_out.txt; grep "No differences encounter" test_out.txt; magic_brk\n' %(app), filename)
+  out_filename = "output.txt"
+  if "sobel" in app:
+    out_filename = "output.pgm"
+  run_inside_safe(' diff -c /mnt/cdrom/%s.output %s > test_out.txt; grep "No differences encounter" test_out.txt; magic_brk\n' %(app,out_filename), filename)
+  print "Elapsed time after loading ISO: %f" % time.clock()
   check_app_error(capture_log, filename, "")
-
   run_inside_safe(' devfsadm ; mkdir /mnt/new_disk ; magic_brk\n', filename)
   run_inside_safe(' mount /dev/dsk/c0t1d0s2 /mnt/new_disk ; magic_brk\n', filename)
-  run_inside_safe(' cp output.txt /mnt/new_disk/%s.output ; magic_brk\n' %(fault), filename)
+  run_inside_safe(' cp %s /mnt/new_disk/%s.output ; magic_brk\n' %(out_filename,fault), filename)
+    
   if(app == "libquantum_test" or app == "omnetpp_test" ):
     run_inside_safe(' cp output.err /mnt/new_disk/%s.output.err ; magic_brk\n' %(fault), filename)
   run_inside_safe(' umount /mnt/new_disk ; magic_brk\n', filename)
@@ -1431,14 +1480,15 @@ def run_complete_new(app, phase, seqnum, pc, core=-1,  type=-1, bit=-1, stuck=-1
   os.remove('%s'%(capture_log))
   print "saving diff file\n"
   run('sd1.save-diff-file %s' %(craff_filename))
+  print "Elapsed time after run_complete_full: %f" % time.clock()
 
 def sol9_get_output(app, phase, seqnum, pc, core=-1,  type=-1, bit=-1, stuck=-1, faultreg=64, srcdest=0, pilot=0, injcycle=0):
 #def sol9_get_output(app, phase, type, bit, stuck, execUnit, injinst, seqnum, prefix=DIR_PREFIX):
   core = 0
+  print "Elapsed time just before sol9_get_output: %f" % time.clock()
   print "Reading output files from inside the simulator\n"
   fault = '%s.pc%s.p%s.c%s.t%s.b%s.s%s.r%s.d%s.%s' % (app, pc, pilot, core, type, bit, stuck, faultreg, srcdest, seqnum)
 
-#  print "got here 1\n"
 
 # REMEMBER TO MAKE THIS SCALABLE GOLDEN
 #  run('read-configuration /home/pramach2/research/GEMS/simics/home/opensolaris_chkpt/sol9_100mb_disk_with_magic')
@@ -1448,9 +1498,10 @@ def sol9_get_output(app, phase, seqnum, pc, core=-1,  type=-1, bit=-1, stuck=-1,
   run_inside('mount /host ; ls /host ; mkdir /mnt/new_disk ; mount /dev/dsk/c0t1d0s2 /mnt/new_disk ; magic_brk \n')
   #run_inside('cp /mnt/new_disk/%s.output /host/home/sadve/shari2/outputs/ ; magic_brk \n' %(fault))
   #REMEMBER TO CHANGE PATH TO MAKE SCALABLE
-  run_inside('cp /mnt/new_disk/%s.output /host/scratch/amahmou2/outputs/ ; magic_brk \n' %(fault))
+  run_inside('cp /mnt/new_disk/%s.output /host/scratch/kahmed10/outputs/ ; magic_brk \n' %(fault))
   if(app == "libquantum_test" or app == "omnetpp_test" ):
-    run_inside('cp /mnt/new_disk/%s.output.err /host/scratch/amahmou2/outputs/ ; magic_brk \n' %(fault))
+    run_inside('cp /mnt/new_disk/%s.output.err /host/scratch/kahmed10/outputs/ ; magic_brk \n' %(fault))
+  print "Elapsed time just after sol9_get_output: %f" % time.clock()
 #  print "got here 2\n"
 
 def print_checkpoint_cycle_nums(check_list, app):
@@ -1478,11 +1529,16 @@ def create_intermediate_checkpoints(app):
   # print cycle count to file
   print curr_cycle
   checkpoint_list.append(curr_cycle)
+  run_sim_command('write-configuration -z %s/intermediate/%s_%s' % (CHECKPOINT_DIR, app, curr_cycle)) 
   while True:
     run_sim_command('c 100_000_000')
+    #run_sim_command('c 10_000_000')
+    #run_sim_command('c 1_000_000')
     new_curr_cycle = SIM_cycle_count(conf.cpu0)
   # print cycle count to file
     if(new_curr_cycle - curr_cycle == 100000000):  # magic break not reached
+    #if(new_curr_cycle - curr_cycle == 10000000):  # magic break not reached
+    #if(new_curr_cycle - curr_cycle == 1000000):  # magic break not reached
       print new_curr_cycle
       checkpoint_list.append(new_curr_cycle)
       run_sim_command('write-configuration -z %s/intermediate/%s_%s' % (CHECKPOINT_DIR, app, new_curr_cycle))
@@ -1826,7 +1882,7 @@ def check_patterns_dynamic(app, control_info_q, instr_info_q, big_pc_q, cycle):
   #print len(local_pc_q)
   #t3 = time.clock()
 
-  if pc in pc_patterns: # pc is a key in pc_patterns
+  if pc in pc_patterns:# and pc == 0x100003894: # pc is a key in pc_patterns
     pattern_found = 0
     index = 0
     for item in pc_patterns[pc] :
@@ -1834,10 +1890,10 @@ def check_patterns_dynamic(app, control_info_q, instr_info_q, big_pc_q, cycle):
       if n == len(local_pc_q):
         if item == local_pc_q:
           pattern_found = 1
-          # print "pattern_found: [",
-          # for pc_temp in local_pc_q:
- 	  #        print "%x" %pc_temp,
-          # print "]"
+    #      print "pattern_found: [",
+    #      for pc_temp in local_pc_q:
+    #        print "%x" %pc_temp
+    #        print "]"
           pc_pattern_pop_cycles[pc][index] = pc_pattern_pop_cycles[pc][index] + 1
           if pc_pattern_cycles[pc][index] == 0 :
             pc_pattern_cycles[pc][index] = cycle
@@ -1858,7 +1914,7 @@ def check_patterns_dynamic(app, control_info_q, instr_info_q, big_pc_q, cycle):
 
     if pattern_found == 0:
 
-      if len(pc_patterns[pc]) >= CONTROL_PATTEN_CAP:
+      if len(pc_patterns[pc]) >= CONTROL_PATTEN_CAP: # and False:
         #temp_t1 = time.clock()
 
         #print "Cap reached for pc=%x, depth=%d, adjusting..." %(pc, pc_control_depth[pc])
@@ -1937,11 +1993,16 @@ def check_patterns_dynamic(app, control_info_q, instr_info_q, big_pc_q, cycle):
 
       pc_patterns[pc].append(list(local_pc_q))
       pc_pattern_sample_cycles[pc].append([cycle])
+      #if cycle == 380519859832 or cycle == 380519861540:
+      #  for temp_pc in local_pc_q:
+      #      print "0x%x" %  temp_pc
+      #  print "END"
+      #print "%d:%s" % (cycle, ' '.join(["0x%x" % temp_pc for temp_pc in local_pc_q]))
       pc_pattern_cycles[pc].append(cycle)
       pc_pattern_pop_cycles[pc].append(1)
 
   else:
-    print "pc=%x not found!! " %(pc)
+    #print "pc=%x not found!! " %(pc)
     pass
 
 
@@ -2172,6 +2233,7 @@ def new_app_pattern_profile(app, lc, fn, depth):
         instr_info_q.append( instr_info_map.get(pc, [0, 0, []]) )  # 1 - control flow, 0 - not control flow,
         pc_cycle_q.append(SIM_cycle_count(conf.cpu0))
         if len(pc_q) == CONTROL_PATTERN_LEN:
+          print("len:%d" % len(pc_cycle_q))
           break;
         # combined_ccr = get_combined_ccr(pc)
         # if(combined_ccr != -1):
@@ -2182,7 +2244,10 @@ def new_app_pattern_profile(app, lc, fn, depth):
       priv_pc = pc
 
     if global_magic == 0:
-      SIM_continue(1)
+        SIM_continue(1)
+    elif int(app_txt_info.actual_app_start[app])+4 == pc:
+        global_magic = 0
+        SIM_continue(1)
     else:
       break
 
@@ -2235,6 +2300,13 @@ def new_app_pattern_profile(app, lc, fn, depth):
     pc_cycle_q.pop(0)
     check_patterns_dynamic(app, control_info_q, instr_info_q,  pc_q, pc_cycle_q[0])
 
+  
+  #temp_pc = int("0x100002ed4", 16)
+  print ""
+  #for pc in pc_control_depth:
+  #  print "0x%x:%d" % (pc,pc_control_depth[pc])
+  #for trace in pc_pattern_sample_cycles[temp_pc]:
+  #  print " ".join(["%d" % pc_trace for pc_trace in trace])
   print_pc_pattern_cycles(app, lc, fn)
   run("quit 666")
 
@@ -2708,8 +2780,23 @@ def app_profile(app):
   run_sim_command('magic-break-enable')
   global global_magic
   SIM_hap_add_callback("Core_Magic_Instruction", hap_magic_call_reached, app)
+  #run_sim_command('b %d' %app_txt_info.text_start[app])
   run_sim_command('b %d' %app_txt_info.actual_app_start[app])
   run_sim_command('c')
+  # TEMPORARY!
+#  app_start=SIM_cycle_count(conf.cpu0)
+#  #run_sim_command('print-time')
+#  run_sim_command('b %d' %app_txt_info.actual_app_end[app])
+#  run_sim_command('c')
+#  app_end=SIM_cycle_count(conf.cpu0)
+#  #run_sim_command('print-time')
+#  run_sim_command('b %d' %app_txt_info.text_end[app])
+#  run_sim_command('c')
+#  text_end=SIM_cycle_count(conf.cpu0)
+#  print("app range: %d" % (app_end-app_start))
+#  print("full range: %d" % (text_end-app_end))
+#  #run_sim_command('print-time')
+#  run_sim_command('quit 666')
   #run_sim_command('cpu-switch-time 1')
 
   print SIM_get_program_counter(conf.cpu0)
@@ -2720,6 +2807,7 @@ def app_profile(app):
   while True:
   #for i in range(0,100000000): # 10 million
     pc=SIM_get_program_counter(conf.cpu0)
+    #print 'new %x' %(pc)
     if pc == app_txt_info.actual_app_start[app]:
       profile_now = 1
     if pc == app_txt_info.actual_app_end[app]:
@@ -2732,8 +2820,16 @@ def app_profile(app):
           #print 'new %x' %(pc)
           pc_counters[pc] = 1
 
+    if app_txt_info.actual_app_start[app] == pc:
+        run_sim_command('print-time')
+    if app_txt_info.actual_app_end[app] == pc:
+        run_sim_command('print-time')
     if global_magic == 0:
       SIM_continue(1)
+    elif (int(app_txt_info.actual_app_start[app])+4) == int(pc):
+        print "here!"
+        global_magic = 0
+        SIM_continue(1)
     else:
       break
 
@@ -3283,14 +3379,16 @@ def add_detector_locations(app):
 
 
 def get_injected_val(golden_val, bit):
-  mask = 1<<bit
+  int_bits = int(bit)
+  mask = 1<<int_bits
   #print "mask=%x" %mask
   faulty_val = golden_val
   print "golden reg val=%d (%x)" %(golden_val, golden_val)
-  if golden_val & mask == 0:
-    faulty_val = golden_val | mask
-  else:
-    faulty_val = golden_val & (~mask)
+  faulty_val = golden_val ^ mask
+#  if golden_val & mask == 1:
+#    faulty_val = golden_val | mask
+#  else:
+#    faulty_val = golden_val & (~mask)
   print "faulty val=%d (%x)" %(faulty_val, faulty_val)
   return faulty_val
 
@@ -3489,7 +3587,6 @@ def run_arch_all(app, phase, seqnum, pc, core=-1,  type=-1, bit=-1, stuck=-1, fa
   run_name = '%s.pc%s.p%s.c%s.t%s.b%s.s%s.r%s.d%s.%s' % (app, pc, pilot, core, type, bit, stuck, faultreg, srcdest, seqnum)
   print run_name
   inject_trans_fault(pc, faultreg, bit, srcdest, type)
-
   print "Running benchmark to completion\n"
   print filename
   begin = dict([(p, p.steps) for p in cpu_p])

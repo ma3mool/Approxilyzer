@@ -79,7 +79,7 @@ echo -ne '\E[1;33;44m'"FINILIZING FULL SDC LIST"; tput sgr0
 echo
 
 cat $TEMP_DIR/$1_def.outcomes >> $output_file
-echo "\nWord count for Step 4: Finilizing Script" >> $stats_file
+echo "\nWord count for Step 4: Finalizing Script" >> $stats_file
 wc -l $output_file >> $stats_file 
 
 

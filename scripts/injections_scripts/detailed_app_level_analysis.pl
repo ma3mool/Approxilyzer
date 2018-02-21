@@ -2,14 +2,17 @@
 use Scalar::Util 'looks_like_number';
 
 #my $GOLDEN_DIR = "/home/venktgr2/outputs/fully_optimized";
+my $SCRIPTS_DIR = "$ENV{APPROXILYZER}/scripts/injections_scripts/";
+my $GET_PYTHON_ENV = "/shared/workspace/amahmou2/python_env/abdul_env/bin/activate";
 my $GOLDEN_DIR = "$ENV{APPROXILYZER}/workloads/golden_output";
 my $numArgs = $#ARGV + 1;
-if($numArgs != 2) {
-        print "Usage: perl detailed_app_level_analysis.pl <app_name> <output_file>\n";
+if($numArgs != 3) {
+        print "Usage: perl detailed_app_level_analysis.pl <app_name> <output_file> <id>(set as random string if running script individually) \n";
         die;
 }
 my $app_name = $ARGV[0];
 my $output_file = $ARGV[1];
+my $id = $ARGV[2];
 
 sub get_max	#get the max of two numbers
 {
@@ -98,6 +101,11 @@ if($app_name eq "blackscholes_simlarge" || $app_name eq "blackscholes_input_run_
      || $app_name eq "blackscholes_run_5"
      || $app_name eq "blackscholes_run_1k"
      || $app_name eq "blackscholes_run_21_a"
+     || $app_name eq "blackscholes_run_21_b"
+     || $app_name eq "blackscholes_run_32"
+     || $app_name eq "blackscholes_run_64"
+     || $app_name eq "blackscholes_run_128"
+     || $app_name =~ /blackscholes_run/ 
      || $app_name eq "blackscholes_input_run_00001"
      || $app_name eq "blackscholes_input_run_00002"
      || $app_name eq "blackscholes_input_run_00003"
@@ -215,6 +223,7 @@ if($app_name eq "blackscholes_simlarge" || $app_name eq "blackscholes_input_run_
 	}
 } 
 elsif ($app_name eq "swaptions_simsmall" || $app_name eq "swaptions_simsmall_large"
+    || $app_name =~ /swaptions_run/ 
     || $app_name eq "swaptions_run_input" )
 {
 	my $golden_file = "$GOLDEN_DIR/$app_name.output";
@@ -414,7 +423,7 @@ elsif ($app_name eq "swaptions_simsmall" || $app_name eq "swaptions_simsmall_lar
 	}
 
 } 
-elsif ($app_name eq "water_small" || $app_name eq "water_run_min")
+elsif ($app_name eq "water_small" || $app_name =~ /water_run/ || $app_name eq "water_run_min0" || $app_name eq "water_run_min")
 {
 	my $golden_file = "$GOLDEN_DIR/$app_name.output";
 	$result = `diff -q $output_file $golden_file`;
@@ -721,7 +730,7 @@ elsif ($app_name eq "water_small" || $app_name eq "water_run_min")
 	}
 
 } 
-elsif ($app_name eq "lu_reduced" || $app_name eq "lu_run_input_0" || $app_name eq "lu_run_full" ) {
+elsif ($app_name eq "lu_reduced" || $app_name eq "lu_run_input_0" || $app_name eq "lu_run_full" || $app_name =~ /lu_run/) {
 	my $golden_file = "$GOLDEN_DIR/$app_name.output";
 	$result = `diff -q $output_file $golden_file`;
 	if ($result eq "") {
@@ -967,6 +976,7 @@ elsif ($app_name eq "fft_small" || $app_name eq "fft_run_0"
     || $app_name eq "fft_run_4" 
     || $app_name eq "fft_run_5" 
     || $app_name eq "fft_run_6" 
+    || $app_name =~ /fft/
     )
 {
 	my $golden_file = "$GOLDEN_DIR/$app_name.output";
@@ -1192,7 +1202,7 @@ elsif ($app_name eq "fft_small" || $app_name eq "fft_run_0"
 	} #end of sdc else
 
 } #end of app
-elsif ($app_name eq "streamcluster_simsmall")
+elsif ($app_name eq "streamcluster_simsmall" || $app_name =~ /streamcluster/)
 {
 	my $golden_file = "$GOLDEN_DIR/$app_name.output";
 	$result = `diff -q $output_file $golden_file`;
@@ -1359,7 +1369,29 @@ elsif ($app_name eq "streamcluster_simsmall")
 	} #end of sdc else
 
 } #end of app
-
+if($app_name eq "sobel_run_ref" || $app_name eq "sobel_run_min" || $app_name  =~ /jpeg/ || $app_name =~ /kmeans/ )
+{
+	my $golden_file = "$GOLDEN_DIR/$app_name.output";
+	$result = `diff -q $output_file $golden_file`;
+	if ($result eq "") {
+		print "Masked\n";
+	} else {
+        printf("python %s\n", $GET_PYTHON_ENV);
+        $testing = `source $GET_PYTHON_ENV`;
+        
+        if ($app_name =~ /kmeans/ ) {
+           system("python $SCRIPTS_DIR/convert.py $output_file out_$id.jpg\n");
+           $output = `python $SCRIPTS_DIR/rmse.py $GOLDEN_DIR/$app_name.jpg out_$id.jpg`;
+           system("rm -f out_$id.jpg\n");
+        }
+        else {
+            $output = `python $SCRIPTS_DIR/rmse.py $golden_file $output_file`;
+	    }
+        printf ("%s",$output);
+        `deactivate`;
+		# print "number of differences = $num_diffs\n";
+	}
+} #end of app
 
  
 

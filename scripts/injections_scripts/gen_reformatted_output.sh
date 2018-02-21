@@ -11,11 +11,11 @@ else
     exit 1
 fi
 
-if [ $# -ne 1 ]; then
-    echo "Usage: ./gen_reformatted_output.sh [app_name] "
+if [ $# -lt 1 ] || [ $# -gt 2 ]; then
+    echo "Usage: ./gen_reformatted_output.sh [app_name] (depth)"
     echo "Sample use: ./gen_reformatted_output.sh blackscholes_simlarge"
     echo
-    echo "Warning: You should still look into the script to insure correct paths"
+    echo "Warning: You should still look into the script to ensure correct paths"
     exit 1
 fi
 
@@ -25,9 +25,13 @@ APP_NAME=$1
 echo "FORMATTING OUTCOMES"
 $DIR/convert_outcome_format.sh $APP_NAME
 
+# if there is a depth parameter passed in, use that
 echo "RUNNING parsing_output.pl"
-perl $DIR/parsing_output.pl $APP_NAME
-
+if [ $# == 2 ]; then
+    perl $DIR/parsing_output.pl $APP_NAME $2
+else
+    perl $DIR/parsing_output.pl $APP_NAME
+fi
 echo "DONE!"
 
 

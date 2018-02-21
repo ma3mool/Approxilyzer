@@ -3,8 +3,8 @@
 # Runs injections and cleans up the output for Approxilyzer
 
 # How to use this script
-if [ $# -ne 2 ]; then
-    echo "Usage: ./relyzer_injections.sh [app_name] [phase #]"
+if [ $# -lt 2 ] || [ $# -gt 3 ]; then
+    echo "Usage: ./relyzer_injections.sh [app_name] [phase #] (depth)"
     echo "Possible values for [phase #] are {1-4}. Use 4 for all."
     echo "Sample use: ./relyzer_injections.sh blackscholes_simlarge 4"
     exit 1
@@ -40,11 +40,15 @@ fi
 
 if [ $2 -eq "2" ] || [ $2 -eq "4" ]; then
 # concatenate all outputs to a single file
-    touch $INJECTION_RESULTS/raw_outcomes/${1}.outcomes_raw  #TODO CHECK IF ALREADY FILLED...
-    cat $INJECTION_RESULTS/parallel_outcomes/$1-* >> $INJECTION_RESULTS/raw_outcomes/${1}.outcomes_raw
-    cp $INJECTION_RESULTS/parallel_outcomes/${1}.retries $INJECTION_RESULTS/raw_outcomes
-    rm $INJECTION_RESULTS/parallel_outcomes/${1}-*
-    rm $INJECTION_RESULTS/parallel_outcomes/${1}.retries
+	if [ ! -f $INJECTION_RESULTS/raw_outcomes/${1}.outcomes_raw ]; then
+		touch $INJECTION_RESULTS/raw_outcomes/${1}.outcomes_raw  #TODO CHECK IF ALREADY FILLED...
+		cat $INJECTION_RESULTS/parallel_outcomes/$1-* >> $INJECTION_RESULTS/raw_outcomes/${1}.outcomes_raw
+		cp $INJECTION_RESULTS/parallel_outcomes/${1}.retries $INJECTION_RESULTS/raw_outcomes
+		rm -f $INJECTION_RESULTS/parallel_outcomes/${1}-*
+		rm -f $INJECTION_RESULTS/parallel_outcomes/${1}.retries
+	else
+		echo "Raw Outcomes File exists"
+	fi
 fi
 
 
@@ -52,7 +56,11 @@ fi
 if [ $2 -eq "3" ] || [ $2 -eq "4" ]; then
 # gen_reformatted_output.sh - this calls two scripts
 # this provides the *_all_sdc.txt files
-    $INJECTION_SCRIPTS/gen_reformatted_output.sh $1
+    if [ $# == 2 ]; then
+        $INJECTION_SCRIPTS/gen_reformatted_output.sh $1 $2
+    else
+        $INJECTION_SCRIPTS/gen_reformatted_output.sh $1
+    fi
 
 
 # run prepare_use_def_input.sh

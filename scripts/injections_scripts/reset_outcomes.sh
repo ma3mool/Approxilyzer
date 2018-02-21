@@ -12,9 +12,15 @@ fi
 APP_NAME=$1
 
 
-echo "Removing old files"
-rm $DIR/$APP_NAME-*.outcomes
-rm $DIR/${APP_NAME}.retries
+if [ -f "$DIR/$APP_NAME-1.outcomes" ]; then
+    echo "Removing old outcomes files"
+    rm $DIR/$APP_NAME-*.outcomes
+fi
+
+if [ -f "$DIR/${APP_NAME}.retries" ]; then
+    echo "Removing old retries file"
+    rm $DIR/${APP_NAME}.retries
+fi
 
 echo "Creating new outcome files for $APP_NAME"
 

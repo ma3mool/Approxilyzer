@@ -1,7 +1,7 @@
 #!/bin/bash
 
-if [ $# -ne 1 ]; then
-    echo "Usage: ./gen_all_simics_files.sh [app name]"
+if [ $# -gt 2 ] || [ $# -lt 1 ]; then
+    echo "Usage: ./gen_all_simics_files.sh [app name] (depth)"
     echo "Sample use: ./gen_all_simics_files.sh blackscholes_simlarge"
     echo
     exit 1
@@ -56,7 +56,11 @@ do
 		for f_type in $(echo reg) 
 		do
 			echo "$file"
-			perl -w $PERL_PATH/gen_all_simics_files.pl $app $file $LOG_PATH/${1}_modes.txt $LOG_PATH/${1}-heap-classes.output  $LOG_PATH/${1}-stack-classes.output $LOG_PATH/${1}_sample_control_pc_patterns_50_5000.txt  $f_type; 
+            if [ $# -eq 2 ]; then
+			    perl -w $PERL_PATH/gen_all_simics_files.pl $app $file $LOG_PATH/${1}_modes.txt $LOG_PATH/${1}-heap-classes.output  $LOG_PATH/${1}-stack-classes.output $LOG_PATH/${1}_sample_control_pc_patterns_${2}_5000.txt  $f_type; 
+            else
+			    perl -w $PERL_PATH/gen_all_simics_files.pl $app $file $LOG_PATH/${1}_modes.txt $LOG_PATH/${1}-heap-classes.output  $LOG_PATH/${1}-stack-classes.output $LOG_PATH/${1}_sample_control_pc_patterns_50_5000.txt  $f_type; 
+            fi
 		done
 	done
 done 

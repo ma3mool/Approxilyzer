@@ -126,3 +126,4 @@ do
 done
 wait
 echo "Done. Finished running script with parameters $1 $2 $3 $4 $5 $6."
+/shared/workspace/kahmed10/scripts/send_email.sh "static $1 $2 $3 $4 $5 $6"

@@ -6,8 +6,8 @@
 #   - stack-analyze 
 #   - control_patterns
 
-if [ $# -ne 4 ]; then
-    echo "Usage: ./run_dynamic_analysis_with_cmd_line.sh [run_heap_analysis] [run_stack_analysis] [run_control_patterns] [app name]."
+if [ $# -gt 5 ] || [ $# -lt 4 ]; then
+    echo "Usage: ./run_dynamic_analysis_with_cmd_line.sh [run_heap_analysis] [run_stack_analysis] [run_control_patterns] [app name] (depth)."
     echo "Sample use: ./run_dyanmic_analysis_cmd_line.sh 1 0 1 blackscholes"
     echo
     echo "Warning: You should still look into the script to insure correct paths"
@@ -55,7 +55,9 @@ RUN_HEAP_ANALYZE=$1          # set to 0 or 1
 RUN_STACK_ANALYZE=$2         # set to 0 or 1
 RUN_CONTROL_PATTERNS=$3      # set to 0 or 1 
 DEPTH=50                    # Control Pattern Depth
-
+if [ $# -eq 5 ]; then
+    DEPTH=$5
+fi
 
 
 cd $SIMICS_DIR
@@ -101,3 +103,4 @@ do
 done
 wait
 echo "Done. Finished running script with parameters $1 $2 $3 $4"
+/shared/workspace/kahmed10/scripts/send_email.sh "dynamic $1 $2 $3 $4"

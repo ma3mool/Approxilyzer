@@ -95,3 +95,4 @@ do
 done
 wait
 echo "Clean-up complete. My work is done here."
+/shared/workspace/kahmed10/scripts/send_email.sh "clean up $1 $2 $3 $4 $5"
